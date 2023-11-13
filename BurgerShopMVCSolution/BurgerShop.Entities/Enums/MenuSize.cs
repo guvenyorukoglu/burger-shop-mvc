@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurgerShop.Entities
+namespace BurgerShop.Entities.Enums
 {
-    internal class test
+    public enum MenuSize
     {
+        Small,
+        Medium,
+        Large
     }
 }
