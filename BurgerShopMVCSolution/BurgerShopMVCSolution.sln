@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BurgerShop.Entities", "BurgerShop.Entities\BurgerShop.Entities.csproj", "{0246A394-2316-456E-A2F9-4DA3F930EB48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BurgerShop.Entities", "BurgerShop.Entities\BurgerShop.Entities.csproj", "{0246A394-2316-456E-A2F9-4DA3F930EB48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BurgerShop.DAL", "BurgerShop.DAL\BurgerShop.DAL.csproj", "{5B9D853B-49CF-42A1-91AC-ECFD013C7FD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0246A394-2316-456E-A2F9-4DA3F930EB48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0246A394-2316-456E-A2F9-4DA3F930EB48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0246A394-2316-456E-A2F9-4DA3F930EB48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B9D853B-49CF-42A1-91AC-ECFD013C7FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B9D853B-49CF-42A1-91AC-ECFD013C7FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B9D853B-49CF-42A1-91AC-ECFD013C7FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B9D853B-49CF-42A1-91AC-ECFD013C7FD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

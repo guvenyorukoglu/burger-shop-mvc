@@ -19,9 +19,5 @@ namespace BurgerShop.Entities.Concrete
         public Gender? Gender { get; set; }
         public ICollection<Address>? Addresses { get; set; }
         public ICollection<Order>? Orders { get; set; }
-
     }
-
-
-    
 }

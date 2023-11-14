@@ -7,7 +7,7 @@ namespace BurgerShop.Entities.Concrete
     {
         public int Id { get; set; }
         public string MenuName { get; set; }
-        public string? MenuPhotoUrl { get; set; }
+        public string? MenuImageUrl { get; set; }
         private decimal _menuPrice;
 
         public decimal MenuPrice
