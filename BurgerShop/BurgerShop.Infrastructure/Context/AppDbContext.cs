@@ -1,4 +1,5 @@
 ﻿using BurgerShop.Domain.Entities.Concrete;
+using BurgerShop.Infrastructure.EntityTypeConfigurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,12 @@ namespace BurgerShop.Infrastructure.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            //TODO: Configurations 
+            builder.ApplyConfiguration(new AddressTypeConfiguration())
+                .ApplyConfiguration(new AppUserTypeConfiguration())
+                .ApplyConfiguration(new ExtraTypeConfiguration())
+                .ApplyConfiguration(new MenuTypeConfiguration())
+                .ApplyConfiguration(new OrderDetailTypeConfiguration())
+                .ApplyConfiguration(new OrderTypeConfiguration());
         }
     }
 }

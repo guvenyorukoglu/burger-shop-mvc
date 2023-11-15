@@ -3,7 +3,7 @@ using BurgerShop.Domain.Enums;
 
 namespace BurgerShop.Domain.Entities.Concrete
 {
-    public class BaseEntity : IBaseEntity
+    public abstract class BaseEntity : IBaseEntity
     {
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? ModifiedDate { get; set; }
