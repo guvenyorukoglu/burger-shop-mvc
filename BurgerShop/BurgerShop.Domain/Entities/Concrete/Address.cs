@@ -2,11 +2,16 @@
 
 namespace BurgerShop.Domain.Entities.Concrete
 {
-    public class Address : BaseEntity, IEntity<int>
+    public class Address : BaseEntity, IEntity<Guid>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string FullAddress { get; set; }
         public Guid AppUserId { get; set; }
         public AppUser AppUser { get; set; }
+
+        public static implicit operator Task<object>(Address v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

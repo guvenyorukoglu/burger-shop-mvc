@@ -11,7 +11,7 @@ namespace BurgerShop.Domain.Entities.Concrete
         }
         public Guid Id { get; set; }
         public Guid OrderId { get; set; }
-        public int MenuId { get; set; }
+        public Guid MenuId { get; set; }
         private decimal _menuPrice;
 
         public decimal MenuPrice
@@ -27,7 +27,7 @@ namespace BurgerShop.Domain.Entities.Concrete
             set { _menuQuantity = (short)((value < 0) ? 0 : value); }
         }
 
-        public int? ExtraId { get; set; }
+        public Guid? ExtraId { get; set; }
 
         private decimal _extraPrice;
         public decimal? ExtraPrice

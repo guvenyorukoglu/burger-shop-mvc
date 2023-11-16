@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
-namespace BurgerShop.Domain.Repositories
+namespace BurgerShop.Application.Services.Abstract
 {
-    public interface IBaseRepository<T> where T : class, IBaseEntity, new()
+    public interface IBaseService<T> where T : class, IBaseEntity, new()
     {
         /// <summary>
         /// Inserts the entity.
@@ -13,16 +13,16 @@ namespace BurgerShop.Domain.Repositories
         Task Insert(T entity);
 
         /// <summary>
-        /// Makes soft deletion the entity by it's identifier. Sets it's status to inactive. Does not delete the entity from database.
-        /// </summary>
-        /// <param name="id">Identifier</param>
-        Task Delete(string id);
-
-        /// <summary>
         /// Updates the entity.
         /// </summary>
         /// <param name="entity"></param>
         Task Update(T entity);
+
+        /// <summary>
+        /// Makes soft deletion the entity by it's identifier. Sets it's status to inactive. Does not delete the entity from database.
+        /// </summary>
+        /// <param name="id">Identifier</param>
+        Task Delete(string id);
 
         /// <summary>
         /// Determines whether a sequence contains any elements.
@@ -82,4 +82,6 @@ namespace BurgerShop.Domain.Repositories
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, //orderBy
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);//Join
     }
+
 }
+

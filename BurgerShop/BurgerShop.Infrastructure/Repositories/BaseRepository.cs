@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace BurgerShop.Infrastructure.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntity
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntity, new()
     {
         private readonly AppDbContext _context;
         private readonly DbSet<T> table;
@@ -30,7 +30,7 @@ namespace BurgerShop.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(object id)
+        public async Task Delete(string id)
         {
             //Delete operation will be made by changing entity's status in service layer.
             await _context.SaveChangesAsync();
@@ -87,6 +87,11 @@ namespace BurgerShop.Infrastructure.Repositories
                 return await orderBy(query).Select(select).ToListAsync();
             else
                 return await query.Select(select).ToListAsync();
+        }
+
+        public T GetById(string id)
+        {
+           return table.Find(Guid.Parse(id));
         }
     }
 }

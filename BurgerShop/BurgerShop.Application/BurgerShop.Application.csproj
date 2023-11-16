@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BurgerShop.Domain\BurgerShop.Domain.csproj" />
+    <ProjectReference Include="..\BurgerShop.Infrastructure\BurgerShop.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

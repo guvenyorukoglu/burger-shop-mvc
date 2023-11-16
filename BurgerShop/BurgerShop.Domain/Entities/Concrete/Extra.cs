@@ -2,9 +2,9 @@
 
 namespace BurgerShop.Domain.Entities.Concrete
 {
-    public class Extra : BaseEntity, IEntity<int>
+    public class Extra : BaseEntity, IEntity<Guid>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string ExtraName { get; set; }
         public string? ExtraImageUrl { get; set; }
         private decimal _extraPrice;

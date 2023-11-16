@@ -3,9 +3,9 @@ using BurgerShop.Domain.Enums;
 
 namespace BurgerShop.Domain.Entities.Concrete
 {
-    public class Menu : BaseEntity, IEntity<int>
+    public class Menu : BaseEntity, IEntity<Guid>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string MenuName { get; set; }
         public string? MenuImageUrl { get; set; }
         private decimal _menuPrice;
