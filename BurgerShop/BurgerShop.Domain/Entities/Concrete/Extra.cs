@@ -4,6 +4,10 @@ namespace BurgerShop.Domain.Entities.Concrete
 {
     public class Extra : BaseEntity, IEntity<Guid>
     {
+        public Extra()
+        {
+            OrdersExtras = new List<OrdersExtras>();
+        }
         public Guid Id { get; set; }
         public string ExtraName { get; set; }
         public string? ExtraImageUrl { get; set; }
@@ -14,9 +18,8 @@ namespace BurgerShop.Domain.Entities.Concrete
             get { return _extraPrice; }
             set { _extraPrice = (value < 0) ? 0 : value; }
         }
-        public Guid? OrderDetailId { get; set; }
 
         //Navigation Property
-        public OrderDetail? OrderDetail { get; set; }
+        public ICollection<OrdersExtras>? OrdersExtras { get; set; }
     }
 }

@@ -8,8 +8,11 @@ namespace BurgerShop.Infrastructure.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
-            builder.HasMany(u => u.Orders).WithOne(o => o.AppUser).HasForeignKey(o => o.AppUserId);
 
+            builder.Property(u => u.FirstName).IsRequired().HasMaxLength(20);
+            builder.Property(u => u.LastName).IsRequired().HasMaxLength(30);
+
+            builder.HasMany(u => u.Orders).WithOne(o => o.AppUser).HasForeignKey(o => o.AppUserId);
             builder.HasMany(u => u.Addresses).WithOne(a => a.AppUser).HasForeignKey(a => a.AppUserId);
         }
     }

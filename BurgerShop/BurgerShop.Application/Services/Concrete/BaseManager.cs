@@ -61,6 +61,7 @@ namespace BurgerShop.Application.Services.Concrete
 
         public Task Update(T entity)
         {
+            entity.ModifiedDate = DateTime.Now;
             return _repository.Update(entity);
         }
     }

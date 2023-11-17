@@ -16,7 +16,6 @@ namespace BurgerShop.Infrastructure.EntityTypeConfigurations
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.HasOne(o => o.OrderDetail).WithOne(od => od.Order).HasForeignKey<OrderDetail>(od => od.OrderId);
         }
     }
 }

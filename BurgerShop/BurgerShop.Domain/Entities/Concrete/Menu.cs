@@ -5,6 +5,10 @@ namespace BurgerShop.Domain.Entities.Concrete
 {
     public class Menu : BaseEntity, IEntity<Guid>
     {
+        public Menu()
+        {
+            OrdersMenus = new List<OrdersMenus>();
+        }
         public Guid Id { get; set; }
         public string MenuName { get; set; }
         public string? MenuImageUrl { get; set; }
@@ -16,9 +20,8 @@ namespace BurgerShop.Domain.Entities.Concrete
             set { _menuPrice = (value < 0) ? 0 : value; }
         }
         public MenuSize MenuSize { get; set; } = MenuSize.Small;
-        public Guid? OrderDetailId { get; set; }
 
         //Navigation Property
-        public OrderDetail? OrderDetail { get; set; }
+        public ICollection<OrdersMenus>? OrdersMenus { get; set; }
     }
 }

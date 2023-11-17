@@ -16,8 +16,10 @@ namespace BurgerShop.Infrastructure.Context
         public DbSet<Extra> Extras { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<OrdersMenus> OrdersMenus { get; set; }
+        public DbSet<OrdersExtras> OrdersExtras { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,8 +28,9 @@ namespace BurgerShop.Infrastructure.Context
                 .ApplyConfiguration(new AppUserTypeConfiguration())
                 .ApplyConfiguration(new ExtraTypeConfiguration())
                 .ApplyConfiguration(new MenuTypeConfiguration())
-                .ApplyConfiguration(new OrderDetailTypeConfiguration())
-                .ApplyConfiguration(new OrderTypeConfiguration());
+                .ApplyConfiguration(new OrderTypeConfiguration())
+                .ApplyConfiguration(new OrdersMenusTypeConfiguration())
+                .ApplyConfiguration(new OrdersExtrasTypeConfiguration());
         }
     }
 }

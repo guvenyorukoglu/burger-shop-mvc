@@ -13,8 +13,9 @@ namespace BurgerShop.Domain.Entities.Concrete
         }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? ModifiedDate { get; set; }
-        public AppUser? CreatedBy { get; set; }
         public Status Status { get; set; } = Status.Active;
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }
         public Gender? Gender { get; set; }
         public ICollection<Address>? Addresses { get; set; }

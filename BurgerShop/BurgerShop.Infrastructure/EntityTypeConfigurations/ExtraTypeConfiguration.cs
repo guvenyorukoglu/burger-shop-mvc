@@ -10,7 +10,7 @@ namespace BurgerShop.Infrastructure.EntityTypeConfigurations
         {
             builder.Property(e => e.ExtraName)
                 .IsRequired()
-                .HasMaxLength(32);
+                .HasMaxLength(50);
 
             builder.Property(e => e.ExtraPrice)
                 .IsRequired()

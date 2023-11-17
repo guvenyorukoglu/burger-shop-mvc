@@ -7,7 +7,6 @@ namespace BurgerShop.Domain.Entities.Concrete
     {
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? ModifiedDate { get; set; }
-        public AppUser? CreatedBy { get; set; }
         public Status Status { get; set; } = Status.Active;
     }
 }

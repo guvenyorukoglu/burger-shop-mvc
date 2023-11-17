@@ -5,6 +5,11 @@ namespace BurgerShop.Domain.Entities.Concrete
 {
     public class Order : BaseEntity, IEntity<Guid>
     {
+        public Order()
+        {
+            OrdersMenus = new List<OrdersMenus>();
+            OrdersExtras = new List<OrdersExtras>();
+        }
         public Guid Id { get; set; }
         public Guid AppUserId { get; set; }
         public short OrderQuantity { get; set; } = 1;
@@ -16,6 +21,7 @@ namespace BurgerShop.Domain.Entities.Concrete
 
         //Navigation Property
         public AppUser AppUser { get; set; }
-        public OrderDetail OrderDetail { get; set; }
+        public ICollection<OrdersMenus> OrdersMenus { get; set; }
+        public ICollection<OrdersExtras>? OrdersExtras { get; set; }   
     }
 }
