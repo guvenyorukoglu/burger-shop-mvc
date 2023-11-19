@@ -24,8 +24,8 @@ namespace BurgerShop.Application.Services.Concrete
         public Task Delete(string id)
         {
             T entity = _repository.GetById(id);
-            entity.Status = Status.Passive;
-            entity.ModifiedDate = DateTime.Now;
+            entity.Status = Status.Deleted;
+            entity.DeletedDate = DateTime.Now;
             return _repository.Delete(id);
         }
 

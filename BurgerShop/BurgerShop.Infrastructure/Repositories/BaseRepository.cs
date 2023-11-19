@@ -41,6 +41,11 @@ namespace BurgerShop.Infrastructure.Repositories
             return await table.AnyAsync(expression);
         }
 
+        public async Task<List<T>> GetAll()
+        {
+            return await table.ToListAsync();
+        }
+
         public async Task<T> GetDefault(Expression<Func<T, bool>> expression)
         {
             return await table.FirstOrDefaultAsync(expression);
@@ -93,5 +98,7 @@ namespace BurgerShop.Infrastructure.Repositories
         {
            return table.Find(Guid.Parse(id));
         }
+
+        
     }
 }

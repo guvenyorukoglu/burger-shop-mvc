@@ -1,5 +1,7 @@
 ﻿using BurgerShop.Domain.Entities.Abstract;
 using BurgerShop.Domain.Enums;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BurgerShop.Domain.Entities.Concrete
 {
@@ -11,7 +13,7 @@ namespace BurgerShop.Domain.Entities.Concrete
         }
         public Guid Id { get; set; }
         public string MenuName { get; set; }
-        public string? MenuImageUrl { get; set; }
+
         private decimal _menuPrice;
 
         public decimal MenuPrice
@@ -20,6 +22,10 @@ namespace BurgerShop.Domain.Entities.Concrete
             set { _menuPrice = (value < 0) ? 0 : value; }
         }
         public MenuSize MenuSize { get; set; } = MenuSize.Small;
+        public string? MenuImagePath { get; set; }
+
+        [NotMapped]
+        public IFormFile MenuUploadPath { get; set; }
 
         //Navigation Property
         public ICollection<OrdersMenus>? OrdersMenus { get; set; }

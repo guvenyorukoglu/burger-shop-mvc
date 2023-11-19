@@ -53,6 +53,12 @@ namespace BurgerShop.Domain.Repositories
         Task<List<T>> GetDefaults(Expression<Func<T, bool>> expression);
 
         /// <summary>
+        /// Gets all entities.
+        /// </summary>
+        /// <returns>Returns the list of all entities.</returns>
+        Task<List<T>> GetAll();
+        
+        /// <summary>
         /// Gets the first element according to the parameters given.
         /// </summary>
         /// <typeparam name="TResult">The type of the resulting value.</typeparam>

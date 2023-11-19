@@ -11,4 +11,12 @@
     <ProjectReference Include="..\BurgerShop.Infrastructure\BurgerShop.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\VMs\" />
+    <Folder Include="Services\ExtraServices\" />
+    <Folder Include="Services\MenuServices\" />
+    <Folder Include="Services\OrderServices\" />
+    <Folder Include="Services\AddressServices\" />
+  </ItemGroup>
+
 </Project>

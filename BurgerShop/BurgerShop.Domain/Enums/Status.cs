@@ -9,7 +9,7 @@ namespace BurgerShop.Domain.Enums
     public enum Status
     {
         Active = 1,
-        Modified = 2,
-        Passive = 3
+        Passive = 2,
+        Deleted = 3
     }
 }
