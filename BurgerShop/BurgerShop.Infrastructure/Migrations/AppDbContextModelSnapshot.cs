@@ -242,8 +242,7 @@ namespace BurgerShop.Infrastructure.Migrations
 
                     b.Property<string>("ShippedAddress")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ShippedDate")
                         .HasColumnType("datetime2");

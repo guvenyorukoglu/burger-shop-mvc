@@ -22,6 +22,6 @@ namespace BurgerShop.Domain.Entities.Concrete
         //Navigation Property
         public AppUser AppUser { get; set; }
         public ICollection<OrdersMenus> OrdersMenus { get; set; }
-        public ICollection<OrdersExtras>? OrdersExtras { get; set; }   
+        public ICollection<OrdersExtras>? OrdersExtras { get; set; }
     }
 }

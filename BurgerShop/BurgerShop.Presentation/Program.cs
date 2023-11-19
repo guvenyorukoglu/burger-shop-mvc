@@ -41,7 +41,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-SeedDataGenerator.Seed(app,100,5,3,3);
+SeedDataGenerator.Seed(app,100,2,5,3,3);
 
 app.MapControllerRoute(
     name: "default",

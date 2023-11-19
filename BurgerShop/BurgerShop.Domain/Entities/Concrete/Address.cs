@@ -9,9 +9,5 @@ namespace BurgerShop.Domain.Entities.Concrete
         public Guid AppUserId { get; set; }
         public AppUser AppUser { get; set; }
 
-        public static implicit operator Task<object>(Address v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
