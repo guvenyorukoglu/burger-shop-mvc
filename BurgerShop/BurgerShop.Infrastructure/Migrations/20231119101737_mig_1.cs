@@ -60,7 +60,7 @@ namespace BurgerShop.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExtraName = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    ExtraName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ExtraImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExtraPrice = table.Column<decimal>(type: "decimal(4,2)", precision: 4, scale: 2, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -229,7 +229,7 @@ namespace BurgerShop.Infrastructure.Migrations
                     OrderStatus = table.Column<int>(type: "int", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ShippedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Notes = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     ShippedAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
