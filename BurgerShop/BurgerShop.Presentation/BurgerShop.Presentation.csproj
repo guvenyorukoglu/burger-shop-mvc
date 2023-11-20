@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BurgerShop.Application\BurgerShop.Application.csproj" />
+    <ProjectReference Include="..\BurgerShop.Domain\BurgerShop.Domain.csproj" />
+    <ProjectReference Include="..\BurgerShop.Infrastructure\BurgerShop.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,296 @@
+﻿@using BurgerShop.Application.Models.VMs;
+@using BurgerShop.Domain.Entities.Concrete;
+@using BurgerShop.Domain.Enums;
+@using BurgerShop.Infrastructure.Context;
+@{
+    ViewData["Title"] = "Menu";
+}
+
+@{
+    Layout = "~/Views/Shared/_MenuLayout.cshtml";
+}
+
+@{
+    Menu selectedMenu = ViewBag.SelectedMenu as Menu; // ViewBag üzerinden Menu nesnesine erişim
+}
+@{
+    List<Menu> menuList = ViewBag.MenuList as List<Menu>;
+}
+@model MenuVM// TODO: Kendi Modelimizle değiştireceğiz
+
+@{
+    List<MenuSize> menuSizeList = Enum.GetValues(typeof(MenuSize)).Cast<MenuSize>().ToList();
+}
+
+<head>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+
+
+
+    <link rel="stylesheet" href="~/Content/main.css" />
+
+
+</head>
+
+
+
+
+
+
+
+<body>
+    @{
+       
+
+        List<Menu> displayedMenus = Model.MenuList;
+
+        if (Model != null)
+        {
+            List<Menu> menus = displayedMenus;
+            int itemsPerPage = 6;
+            int currentPage = ViewBag.CurrentPage ?? 1;
+
+            var startIndex = (currentPage - 1) * itemsPerPage;
+            var endIndex = startIndex + itemsPerPage;
+            displayedMenus = menus.Skip(startIndex).Take(itemsPerPage).ToList();
+        }
+        <div class="container">
+            @foreach (var menuItem in displayedMenus)
+            {
+                <div class="col-lg-4 col-md-6 mt-4">
+                    <div class="menu-box border bg-dark rounded-3">
+                        <div id="our-menu" class="bg-light text-center">
+                            <img class="img-fluid" style="width: 200px" src="@menuItem.MenuImagePath" alt="" />
+                        </div>
+                        <div class="container bg-dark text-white text-start p-4 rounded-bottom-3" style="display:flex; flex-direction:column">
+                            <h5>@menuItem.MenuName</h5> <hr>
+
+                            <select name="menuSizes" id="menuSizes">
+                                @foreach (var size in menuSizeList)
+                                {
+                                    <option value="@size">@size</option>
+                                }
+                            </select>
+
+
+                            <h6 class="text-start mt-5">
+                                @menuItem.MenuPrice ₺
+
+
+                                <form method="post" asp-action="AddToCart" asp-controller="Home" class="addToCartForm" id="addToCartForm">
+
+
+                                    <input type="hidden" name="menu.Name" value="@menuItem.MenuName" />
+                                    <input type="hidden" name="menu.Price" value="@menuItem.MenuPrice" />
+
+                                    <button type="submit" onclick="AddedToCart()" id="btn-cart" class="btn btn-warning float-end rounded-5 pt-2 pb-2">
+
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </button>
+
+                                </form>
+
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+
+    <div class="modal fade modal-xl"
+         id="exampleModal"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Order Your Hamburger
+                    </h5>
+                    <button type="button"
+                            class="close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <h1>Shopping Cart</h1>
+
+                    <div class="shopping-cart">
+
+                        <div class="column-labels">
+                            <label class="product-image">Image</label>
+                            <label class="product-details">Product</label>
+                            <label class="product-price">Price</label>
+                            <label class="product-extra">Extra</label>
+                            <label class="product-extra">Beverage</label>
+
+                            <label class="product-quantity">Quantity</label>
+                            <label class="product-removal">Remove</label>
+                            <label class="product-line-price">Total</label>
+                        </div>
+
+
+                        @{
+
+
+                        }
+
+                        @*TODO: Bu kısımda modele ait bilgileri getirmemiz gerekecek.*@
+                        @if (selectedMenu != null)
+                        {
+
+
+                            <div class="product">
+
+
+
+                                <div class="product-image">
+                                    <img src=@selectedMenu.MenuImagePath alt="image">
+                                </div>
+
+                                <div class="product-details">
+                                    <div class="product-title">@selectedMenu.MenuName</div>
+                                    @* <p class="product-description">@selectedMenu.MenuSize.GetType</p>*@
+                                </div>
+                                <div class="product-price">@selectedMenu.MenuPrice</div>
+                                <div class="product-extra">
+                                    <label for="extraOptions"></label>
+                                    <select id="extraOptions" name="selectedExtra">
+                                        <option value="ketchup&mayonaise">Ketchup</option>
+                                        <option value="ranch">Ranch</option>
+
+                                    </select>
+                                </div>
+                                <div class="product-extra">
+                                    <label for="extraOptions"></label>
+                                    <select id="extraOptions" name="selectedExtra">
+                                        <option value="Soda">Soda</option>
+                                        <option value="Water">Water</option>
+                                        <option value="Juice">Orange Juice</option>
+
+                                    </select>
+                                </div>
+
+
+
+
+                                <div class="product-quantity">
+                                    <input type="number" value="1" min="1">
+                                </div>
+                                <div class="product-removal">
+                                    <button class="remove-product">
+                                        Remove
+                                    </button>
+                                </div>
+                                <div class="product-line-price">@selectedMenu.MenuPrice</div>
+
+
+                            </div>
+
+
+                            <div class="totals">
+                                <div class="totals-item">
+                                    <label>Subtotal</label>
+                                    <div class="totals-value" id="cart-subtotal">0</div>
+                                </div>
+
+                                <div class="totals-item">
+                                    <label>Tax (20%)</label>
+                                    <div class="totals-value" id="cart-tax">0</div>
+                                </div>
+
+                                <div class="totals-item totals-item-total">
+                                    <label>Grand Total</label>
+                                    <div class="totals-value" id="cart-total">0</div>
+                                </div>
+                            </div>
+
+                        }
+
+
+
+
+
+
+
+
+
+                        <button onclick="orderCreated()" class="checkout">Checkout</button>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pagination"></div>
+
+
+
+    <script src="~/Content/js/pagination.js"></script>
+
+
+    <script src="~/Content/js/cart.js"></script>
+
+    <script>
+        function AddedToCart() {
+
+            swal({
+                icon: "success",
+            });
+        }
+
+    </script>
+
+
+    <script>
+
+        swal({
+            icon: "success",
+        });
+
+    </script>
+
+
+</body>
