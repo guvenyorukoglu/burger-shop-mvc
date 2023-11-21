@@ -10,17 +10,26 @@
     Layout = "~/Views/Shared/_MenuLayout.cshtml";
 }
 
-@{
-    Menu selectedMenu = ViewBag.SelectedMenu as Menu; // ViewBag üzerinden Menu nesnesine erişim
-}
-@{
-    List<Menu> menuList = ViewBag.MenuList as List<Menu>;
-}
 @model MenuVM// TODO: Kendi Modelimizle değiştireceğiz
 
 @{
-    List<MenuSize> menuSizeList = Enum.GetValues(typeof(MenuSize)).Cast<MenuSize>().ToList();
+    Menu selectedMenu = ViewBag.SelectedMenu as Menu;
+    List<Menu> displayedMenus = Model?.MenuList ?? new List<Menu>();
+
 }
+@{
+    //List<Menu> menuList = ViewBag.MenuList as List<Menu>;
+    //List<Menu> displayedMenus = ViewBag.MenuList as List<Menu>;
+    //List<Menu> displayedMenus = Model.MenuList;
+}
+
+
+@{
+    List<MenuSize> menuSizeList = Enum.GetValues(typeof(MenuSize)).Cast<MenuSize>().ToList();
+
+    List<Extra> extras = new List<Extra>();
+}
+
 
 <head>
 
@@ -54,9 +63,26 @@
 
 
 
-
-
     <link rel="stylesheet" href="~/Content/main.css" />
+
+
+
+    <script>
+        function getPrice() {
+            var selectedSize = document.getElementById("menuSizes").value;
+            var menuId = document.querySelector('.menuSizes:selected').getAttribute('menuSizes');
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/Menu",
+                data: { menuSizes: selectedSize, menuId: menuId },
+                success: function (price) {
+                    $("#priceDisplay").text(price + ' ₺');
+                }
+            });
+        }
+    </script>
+
 
 
 </head>
@@ -69,19 +95,21 @@
 
 <body>
     @{
-       
 
-        List<Menu> displayedMenus = Model.MenuList;
+
+
 
         if (Model != null)
         {
-            List<Menu> menus = displayedMenus;
+            //List<Menu> menus = displayedMenus;
             int itemsPerPage = 6;
             int currentPage = ViewBag.CurrentPage ?? 1;
 
             var startIndex = (currentPage - 1) * itemsPerPage;
             var endIndex = startIndex + itemsPerPage;
-            displayedMenus = menus.Skip(startIndex).Take(itemsPerPage).ToList();
+
+
+            //displayedMenus = menus.Skip(startIndex).Take(itemsPerPage).ToList();
         }
         <div class="container">
             @foreach (var menuItem in displayedMenus)
@@ -97,29 +125,30 @@
                             <select name="menuSizes" id="menuSizes">
                                 @foreach (var size in menuSizeList)
                                 {
-                                    <option value="@size">@size</option>
+                                    <option onchange="getPrice" value="@size">@size</option>
                                 }
                             </select>
 
 
-                            <h6 class="text-start mt-5">
+                            <h6 class="text-start mt-5" id="priceDisplay">
                                 @menuItem.MenuPrice ₺
-
-
-                                <form method="post" asp-action="AddToCart" asp-controller="Home" class="addToCartForm" id="addToCartForm">
-
-
-                                    <input type="hidden" name="menu.Name" value="@menuItem.MenuName" />
-                                    <input type="hidden" name="menu.Price" value="@menuItem.MenuPrice" />
-
-                                    <button type="submit" onclick="AddedToCart()" id="btn-cart" class="btn btn-warning float-end rounded-5 pt-2 pb-2">
-
-                                        <i class="fa fa-shopping-cart"></i>
-                                    </button>
-
-                                </form>
-
                             </h6>
+
+
+                            <form method="post" asp-action="AddToCart" asp-controller="Home" class="addToCartForm" id="addToCartForm">
+
+
+                                <input type="hidden" name="MenuName" value="@menuItem.MenuName" />
+                                <input type="hidden" name="MenuPrice" value="@menuItem.MenuPrice" />
+
+                                <button type="submit" asp-action="AddToCart" onclick="AddedToCart()" id="btn-cart" class="btn btn-warning float-end rounded-5 pt-2 pb-2">
+
+                                    <i class="fa fa-shopping-cart"></i>
+                                </button>
+
+                            </form>
+
+
                         </div>
                     </div>
                 </div>
@@ -158,9 +187,9 @@
                             <label class="product-image">Image</label>
                             <label class="product-details">Product</label>
                             <label class="product-price">Price</label>
-                            <label class="product-extra">Extra</label>
-                            <label class="product-extra">Beverage</label>
+                            <label class="product-extra">Size</label>
 
+                            <label class="product-quantity">Extra</label>
                             <label class="product-quantity">Quantity</label>
                             <label class="product-removal">Remove</label>
                             <label class="product-line-price">Total</label>
@@ -173,76 +202,68 @@
                         }
 
                         @*TODO: Bu kısımda modele ait bilgileri getirmemiz gerekecek.*@
-                        @if (selectedMenu != null)
-                        {
+
+                        <div class="product">
+                            @if (Model != null && Model.AddedMenus != null && Model.AddedMenus.Any())
+                            {
+                                <div class="product-item">
+                                    @foreach (var item in Model.AddedMenus)
+                                    {
+
+                                        <div class="product-image">
+                                            <img src="@item.MenuImagePath" alt="image">
+                                        </div>
+
+                                        <div class="product-details">
+                                            <div class="product-title">@item.MenuName</div>
+                                        </div>
+
+                                        <div class="product-details">
+                                            <div class="product-price">@item.MenuPrice</div>
+                                        </div>
 
 
-                            <div class="product">
+
+                                      
 
 
+                                        <div class="product-extras">
+                                            <div class="product-extra">
+                                                <label for="extraOptions_@item.Id"></label>
 
-                                <div class="product-image">
-                                    <img src=@selectedMenu.MenuImagePath alt="image">
+                                            </div>
+
+
+                                       
+                                            <div class="product-extra">
+                                                
+
+                                                <select name="selectedExtra" id="selectedExtra_@item.Id">
+                                                    @if (Model.Extras != null)
+                                                    {
+                                                        @foreach (var extra in Model.Extras)
+                                                        {
+                                                            <option value="@extra.ExtraName">@extra.ExtraName</option>
+                                                        }
+                                                    }
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="product-quantity">
+                                            <input type="number" value="1" min="1">
+                                        </div>
+                                        <div class="product-removal">
+                                            <button asp-action="RemoveFromCart" class="remove-product">Remove</button>
+                                        </div>
+                                        <div class="product-line-price">@item.MenuPrice</div>
+
+                                    }
                                 </div>
+                            }
+                        </div>
 
-                                <div class="product-details">
-                                    <div class="product-title">@selectedMenu.MenuName</div>
-                                    @* <p class="product-description">@selectedMenu.MenuSize.GetType</p>*@
-                                </div>
-                                <div class="product-price">@selectedMenu.MenuPrice</div>
-                                <div class="product-extra">
-                                    <label for="extraOptions"></label>
-                                    <select id="extraOptions" name="selectedExtra">
-                                        <option value="ketchup&mayonaise">Ketchup</option>
-                                        <option value="ranch">Ranch</option>
-
-                                    </select>
-                                </div>
-                                <div class="product-extra">
-                                    <label for="extraOptions"></label>
-                                    <select id="extraOptions" name="selectedExtra">
-                                        <option value="Soda">Soda</option>
-                                        <option value="Water">Water</option>
-                                        <option value="Juice">Orange Juice</option>
-
-                                    </select>
-                                </div>
-
-
-
-
-                                <div class="product-quantity">
-                                    <input type="number" value="1" min="1">
-                                </div>
-                                <div class="product-removal">
-                                    <button class="remove-product">
-                                        Remove
-                                    </button>
-                                </div>
-                                <div class="product-line-price">@selectedMenu.MenuPrice</div>
-
-
-                            </div>
-
-
-                            <div class="totals">
-                                <div class="totals-item">
-                                    <label>Subtotal</label>
-                                    <div class="totals-value" id="cart-subtotal">0</div>
-                                </div>
-
-                                <div class="totals-item">
-                                    <label>Tax (20%)</label>
-                                    <div class="totals-value" id="cart-tax">0</div>
-                                </div>
-
-                                <div class="totals-item totals-item-total">
-                                    <label>Grand Total</label>
-                                    <div class="totals-value" id="cart-total">0</div>
-                                </div>
-                            </div>
-
-                        }
 
 
 
@@ -273,6 +294,25 @@
 
     <script src="~/Content/js/cart.js"></script>
 
+
+    <script>
+        $("#menuSizes").change(function () {
+            var selectedMenuId = $(this).val();
+            var selectedSizeId = $("#menuSizes").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetPriceBySize",
+                data: { id: selectedMenuId, menuSize: selectedSizeId },
+                success: function (price) {
+                    $("#menuSizes").text(price + ' ₺');
+                }
+            });
+        });
+    </script>
+
+
+
     <script>
         function AddedToCart() {
 
@@ -291,6 +331,9 @@
         });
 
     </script>
+
+
+
 
 
 </body>
