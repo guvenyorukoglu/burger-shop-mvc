@@ -5,6 +5,7 @@ using BurgerShop.Infrastructure.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using static System.Net.WebRequestMethods;
 
 namespace BurgerShop.Infrastructure.SeedData
 {
@@ -99,7 +100,8 @@ namespace BurgerShop.Infrastructure.SeedData
                             .RuleFor(e => e.ExtraName, _ => extra)
                             .RuleFor(e => e.ExtraPrice, f => f.Random.Decimal(1, 5))
                             .RuleFor(e => e.CreatedDate, f => f.Date.Past(1))
-                            .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive);
+                            .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive)
+                            .RuleFor(e => e.ExtraImageUrl, (_,e) => "https://placehold.co/400?text=" + e.ExtraName + "&font=roboto");
 
                     extras.Add(extraFake);
                 }
@@ -117,7 +119,8 @@ namespace BurgerShop.Infrastructure.SeedData
                                 .RuleFor(e => e.MenuPrice, f => f.Random.Decimal(8, 15))
                                 .RuleFor(e => e.MenuSize, _ => menuSize)
                                 .RuleFor(e => e.CreatedDate, f => f.Date.Past(1))
-                                .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive);
+                                .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive)
+                                .RuleFor(e => e.MenuImagePath, (_, e) => "https://placehold.co/400?text=" + e.MenuName + "&font=roboto");
 
                         menus.Add(menuFake);
                     }
@@ -137,7 +140,8 @@ namespace BurgerShop.Infrastructure.SeedData
                              .RuleFor(u => u.UserName, f => f.Person.UserName)
                              .RuleFor(u => u.Email, f => f.Person.Email)
                              .RuleFor(u => u.EmailConfirmed, f => f.Random.Bool(0.75f) ? true : false)
-                             .RuleFor(u => u.PhoneNumber, f => f.Person.Phone);
+                             .RuleFor(u => u.PhoneNumber, f => f.Person.Phone)
+                             .RuleFor(u => u.ProfileImagePath, _ => "https://picsum.photos/200");
 
                 users.AddRange(userFake.Generate(maxUserCount));
             }

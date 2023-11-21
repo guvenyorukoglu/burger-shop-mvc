@@ -1,5 +1,7 @@
 ﻿using BurgerShop.Application.Models.DTOs;
 using BurgerShop.Application.Models.VMs;
+using BurgerShop.Application.Services.Abstract;
+using BurgerShop.Application.Services.Concrete;
 using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Enums;
 using BurgerShop.Infrastructure.Context;
@@ -15,55 +17,54 @@ namespace BurgerShop.Presentation.Controllers
 
     public class HomeController : Controller
     {
-
-        private readonly AppDbContext _context;
         private static List<Menu> menuList = new List<Menu>();
         private static List<Menu> addedMenus = new List<Menu>();
         private static List<Extra> extras = new List<Extra>();
+        private static IBaseService<Menu> _menuManager;
 
-
-        public HomeController(AppDbContext context)
+        public HomeController(IBaseService<Menu> menuManager)
         {
-            _context = context;
-
-
-
+            _menuManager = menuManager;
         }
 
         public IActionResult Index()
         {
-
             return View();
         }
 
-        public IActionResult Menu()
+        public async Task<IActionResult> Menu()
         {
             //ViewBag.AddedMenus = addedMenus;
 
-            var menuVM = new MenuVM(_context);
+            var menuVM = new MenuVM()
+            {
+                MenuList = await _menuManager.GetFilteredList(
+                    select: x => new Menu(){ 
+                        Id = x.Id,
+                        MenuName = x.MenuName,
+                        MenuPrice = x.MenuPrice,
+                        MenuSize = x.MenuSize,
+                        MenuImagePath = x.MenuImagePath
+                    },
+                    where: x => x.Status == Status.Active)
+
+            };
+
             return View(menuVM);
         }
-
-
-
 
         [HttpPost]
         public IActionResult AddToCart(Menu menu)
         {
-
-
             if (menu != null)
             {
                 addedMenus.Add(menu);
-
                
-                var menuVM = new MenuVM(_context)
+                var menuVM = new MenuVM()
                 {
                     AddedMenus = addedMenus
-
                 };
 
-               
                 return View("Menu", menuVM);
             }
 
@@ -74,7 +75,7 @@ namespace BurgerShop.Presentation.Controllers
         public IActionResult GetCart()
         {
 
-            var menuVM = new MenuVM(_context)
+            var menuVM = new MenuVM()
             {
                 AddedMenus = addedMenus
             };
@@ -89,7 +90,7 @@ namespace BurgerShop.Presentation.Controllers
                 addedMenus.Remove(menu);
             }
 
-            var menuVM = new MenuVM(_context)
+            var menuVM = new MenuVM()
             {
                 AddedMenus = addedMenus,
                 Extras = extras
@@ -101,17 +102,16 @@ namespace BurgerShop.Presentation.Controllers
 
 
         [HttpPost]
-        public IActionResult GetPriceBySize(Guid id, MenuSize menuSize)
+        public async Task<IActionResult> GetPriceBySize(string name, MenuSize menuSize)
         {
-            var menu = _context.Menus.FirstOrDefault(m => m.Id == id);
+            Menu menuSelected = await _menuManager.GetDefault(x => x.MenuName == name && x.MenuSize == menuSize);
 
-            if (menu == null)
+            if (menuSelected == null)
             {
                 return NotFound();
             }
 
-            var price = _context.Menus
-                .FirstOrDefault(p => p.Id == id && p.MenuSize == menuSize);
+            decimal price = menuSelected.MenuPrice;
 
             if (price == null)
             {
@@ -120,6 +120,7 @@ namespace BurgerShop.Presentation.Controllers
 
             return Ok(price);
         }
+
 
     }
 }

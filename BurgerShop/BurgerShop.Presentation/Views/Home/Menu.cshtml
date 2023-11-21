@@ -4,17 +4,17 @@
 @using BurgerShop.Infrastructure.Context;
 @{
     ViewData["Title"] = "Menu";
-}
-
-@{
     Layout = "~/Views/Shared/_MenuLayout.cshtml";
 }
 
-@model MenuVM// TODO: Kendi Modelimizle değiştireceğiz
+@* @model MenuVM// TODO: Kendi Modelimizle değiştireceğiz *@
 
+@model MenuVM
 @{
+
     Menu selectedMenu = ViewBag.SelectedMenu as Menu;
-    List<Menu> displayedMenus = Model?.MenuList ?? new List<Menu>();
+    // List<Menu> displayedMenus = Model?.MenuList ?? new List<Menu>();
+    List<Menu> displayedMenus = Model.MenuList.Where(x => x.MenuSize == MenuSize.Small).ToList();
 
 }
 @{
@@ -68,37 +68,25 @@
 
 
     <script>
-        function getPrice() {
-            var selectedSize = document.getElementById("menuSizes").value;
-            var menuId = document.querySelector('.menuSizes:selected').getAttribute('menuSizes');
+        // function getPrice() {
+        //     var selectedSize = document.getElementById("menuSizes").value;
+        //     var menuId = document.querySelector('.menuSizes:selected').getAttribute('menuSizes');
 
-            $.ajax({
-                type: "POST",
-                url: "/Home/Menu",
-                data: { menuSizes: selectedSize, menuId: menuId },
-                success: function (price) {
-                    $("#priceDisplay").text(price + ' ₺');
-                }
-            });
-        }
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/Home/GetPriceBySize",
+        //         data: { menuSizes: selectedSize, menuId: menuId },
+        //         success: function (price) {
+        //             $("#priceDisplay").text(price + ' ₺');
+        //         }
+        //     });
+        // }
     </script>
-
-
 
 </head>
 
-
-
-
-
-
-
 <body>
     @{
-
-
-
-
         if (Model != null)
         {
             //List<Menu> menus = displayedMenus;
@@ -111,43 +99,42 @@
 
             //displayedMenus = menus.Skip(startIndex).Take(itemsPerPage).ToList();
         }
-        <div class="container">
+        <div class="container gap-3 mt-5">
             @foreach (var menuItem in displayedMenus)
             {
-                <div class="col-lg-4 col-md-6 mt-4">
+                <div class="col-lg-4 mt-4 card">
                     <div class="menu-box border bg-dark rounded-3">
                         <div id="our-menu" class="bg-light text-center">
-                            <img class="img-fluid" style="width: 200px" src="@menuItem.MenuImagePath" alt="" />
+                            <img class="img-fluid" style="width: 100%;" src="@menuItem.MenuImagePath" alt="" />
                         </div>
                         <div class="container bg-dark text-white text-start p-4 rounded-bottom-3" style="display:flex; flex-direction:column">
                             <h5>@menuItem.MenuName</h5> <hr>
 
-                            <select name="menuSizes" id="menuSizes">
+                            <select name="menuSizes" id="menuSizes" class="form-select mb-5 menuSizes" data-menu-name="@menuItem.MenuName">
                                 @foreach (var size in menuSizeList)
                                 {
                                     <option onchange="getPrice" value="@size">@size</option>
                                 }
                             </select>
 
-
-                            <h6 class="text-start mt-5" id="priceDisplay">
-                                @menuItem.MenuPrice ₺
-                            </h6>
-
-
-                            <form method="post" asp-action="AddToCart" asp-controller="Home" class="addToCartForm" id="addToCartForm">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="text-start fs-3">
+                                    <span class="menuPrice">@menuItem.MenuPrice</span> ₺
+                                </h6>
 
 
-                                <input type="hidden" name="MenuName" value="@menuItem.MenuName" />
-                                <input type="hidden" name="MenuPrice" value="@menuItem.MenuPrice" />
+                                <form method="post" asp-action="AddToCart" asp-controller="Home" class="addToCartForm" id="addToCartForm">
 
-                                <button type="submit" asp-action="AddToCart" onclick="AddedToCart()" id="btn-cart" class="btn btn-warning float-end rounded-5 pt-2 pb-2">
 
-                                    <i class="fa fa-shopping-cart"></i>
-                                </button>
+                                    <input type="hidden" name="MenuName" value="@menuItem.MenuName" />
+                                    <input type="hidden" name="MenuPrice" value="@menuItem.MenuPrice" />
 
-                            </form>
+                                    <button type="submit" asp-action="AddToCart" onclick="AddedToCart()" id="btn-cart" class="btn btn-warning float-end rounded-5 pt-2 pb-2">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </button>
 
+                                </form>
+                            </div>
 
                         </div>
                     </div>
@@ -224,7 +211,7 @@
 
 
 
-                                      
+
 
 
                                         <div class="product-extras">
@@ -234,9 +221,9 @@
                                             </div>
 
 
-                                       
+
                                             <div class="product-extra">
-                                                
+
 
                                                 <select name="selectedExtra" id="selectedExtra_@item.Id">
                                                     @if (Model.Extras != null)
@@ -263,16 +250,6 @@
                                 </div>
                             }
                         </div>
-
-
-
-
-
-
-
-
-
-
                         <button onclick="orderCreated()" class="checkout">Checkout</button>
 
                     </div>
@@ -295,22 +272,38 @@
     <script src="~/Content/js/cart.js"></script>
 
 
+    @* <script>
+    $("#menuSizes").change(function () {
+    var selectedMenuId = $(this).val();
+    var selectedSizeId = $("#menuSizes").val();
+
+    $.ajax({
+    type: "POST",
+    url: "/Home/GetPriceBySize",
+    data: { id: selectedMenuId, menuSize: selectedSizeId },
+    success: function (price) {
+    $("#menuSizes").text(price + ' ₺');
+    }
+    });
+    });
+    </script> *@
     <script>
-        $("#menuSizes").change(function () {
-            var selectedMenuId = $(this).val();
-            var selectedSizeId = $("#menuSizes").val();
+        $(".menuSizes").change(function () {
+            var selectedSize = $(this).val();
+            var selectedMenuName = $(this).data('data-menu-name');
+
+            var $currentCard = $(this).closest('.card');
 
             $.ajax({
                 type: "POST",
                 url: "/Home/GetPriceBySize",
-                data: { id: selectedMenuId, menuSize: selectedSizeId },
+                data: { name: selectedMenuName, menuSize: selectedSize },
                 success: function (price) {
-                    $("#menuSizes").text(price + ' ₺');
+                    $currentCard.find('.menuPrice').innerText = price;
                 }
             });
         });
     </script>
-
 
 
     <script>

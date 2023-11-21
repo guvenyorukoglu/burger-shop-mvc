@@ -30,7 +30,7 @@ namespace BurgerShop.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(string id)
+        public async Task Delete(Guid id)
         {
             //Delete operation will be made by changing entity's status in service layer.
             await _context.SaveChangesAsync();
@@ -94,9 +94,9 @@ namespace BurgerShop.Infrastructure.Repositories
                 return await query.Select(select).ToListAsync();
         }
 
-        public T GetById(string id)
+        public T GetById(Guid id)
         {
-           return table.Find(Guid.Parse(id));
+           return table.Find(id);
         }
 
         

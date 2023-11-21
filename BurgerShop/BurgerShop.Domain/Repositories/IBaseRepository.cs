@@ -16,7 +16,7 @@ namespace BurgerShop.Domain.Repositories
         /// Makes soft deletion the entity by it's identifier. Sets it's status to inactive. Does not delete the entity from database.
         /// </summary>
         /// <param name="id">Identifier</param>
-        Task Delete(string id);
+        Task Delete(Guid id);
 
         /// <summary>
         /// Updates the entity.
@@ -36,7 +36,7 @@ namespace BurgerShop.Domain.Repositories
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
-        T GetById(string id);
+        T GetById(Guid id);
 
         /// <summary>
         /// Returns the first element of a sequence, or a default value if the sequence contains no elements.

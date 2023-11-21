@@ -1,18 +1,14 @@
-﻿using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Enums;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BurgerShop.Application.Models.DTOs
 {
     public class MenuDTO
     {
-       
+
+        public Guid Id { get; set; }
         public string MenuName { get; set; }
 
         private decimal _menuPrice;
@@ -27,9 +23,6 @@ namespace BurgerShop.Application.Models.DTOs
 
         [NotMapped]
         public IFormFile MenuUploadPath { get; set; }
-
-       
-
 
     }
 }

@@ -10,20 +10,7 @@ namespace BurgerShop.Application.Models.VMs
 {
     public class MenuVM
     {
-        //public Menu Menu { get; set; }
         public List<Menu> MenuList { get; set; }
-
-        private readonly AppDbContext _context;
-
-    
-
-
-        public MenuVM(AppDbContext context)
-        {
-           _context = context;
-            MenuList = _context.Menus.ToList();
-
-        }
 
         public List<Menu> AddedMenus { get; set; }
 

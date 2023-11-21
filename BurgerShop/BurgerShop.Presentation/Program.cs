@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TolgaSQL")));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQL")));
 builder.Services.AddTransient<IBaseRepository<Address>, AddressRepository>()
                 .AddTransient<IBaseRepository<AppUser>, AppUserRepository>()
                 .AddTransient<IBaseRepository<Extra>, ExtraRepository>()

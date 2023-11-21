@@ -21,7 +21,7 @@ namespace BurgerShop.Application.Services.Concrete
             return await _repository.Any(expression);
         }
 
-        public Task Delete(string id)
+        public Task Delete(Guid id)
         {
             T entity = _repository.GetById(id);
             entity.Status = Status.Deleted;
@@ -29,7 +29,7 @@ namespace BurgerShop.Application.Services.Concrete
             return _repository.Delete(id);
         }
 
-        public T GetById(string id)
+        public T GetById(Guid id)
         {
             return _repository.GetById(id);
         }
