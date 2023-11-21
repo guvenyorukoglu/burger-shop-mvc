@@ -29,6 +29,11 @@ namespace BurgerShop.Application.Services.Concrete
             return _repository.Delete(id);
         }
 
+        public Task<List<T>> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
         public T GetById(Guid id)
         {
             return _repository.GetById(id);

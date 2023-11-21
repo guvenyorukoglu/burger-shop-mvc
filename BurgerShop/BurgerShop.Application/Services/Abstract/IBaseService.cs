@@ -39,6 +39,12 @@ namespace BurgerShop.Application.Services.Abstract
         T GetById(Guid id);
 
         /// <summary>
+        /// Gets all entities.
+        /// </summary>
+        /// <returns>Returns all entities as a list.</returns>
+        Task<List<T>> GetAll();
+
+        /// <summary>
         /// Returns the first element of a sequence, or a default value if the sequence contains no elements.
         /// </summary>
         /// <param name="expression">An expression to get the element.</param>
