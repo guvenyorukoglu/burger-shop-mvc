@@ -28,7 +28,7 @@ namespace BurgerShop.Presentation.Controllers
             return View();
         }
 
-        public IActionResult Users()
+        public IActionResult Customers()
         {
             return View();
         }

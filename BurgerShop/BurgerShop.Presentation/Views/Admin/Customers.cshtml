@@ -7,7 +7,7 @@
 
 }
 @{
-    List<Menu> displayedMenus = Model.MenuList.Where(x => x != null && x.MenuSize == MenuSize.Small).ToList();
+    List<AppUser> customers = Model.AppUserCustomers.ToList();
 
 }
 <head>
@@ -80,36 +80,41 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Name</th>
-                            <th>Size</th>
-                            <th>Price</th>
-                            <th>Image</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Gender</th>
+                            <th>Birth Date</th>
+                            <th>Phone Number</th>
+
+                            <th>Profile Picture</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
 
 
-                        @if (displayedMenus != null)
+                        @if (customers != null)
                         {
-                            foreach (var item in displayedMenus)
+                            foreach (var item in customers)
                             {
                                 <tr>
                                     <td>@item.Id</td>
-                                    <td>@item.MenuName</td>
-                                    <td>@item.MenuSize.ToString()</td>
-                                    <td>@item.MenuPrice</td>
+                                    <td>@item.FirstName</td>
+                                    <td>@item.LastName.ToString()</td>
+                                    <td>@item.Gender</td>
+                                    <td>@item.BirthDate</td>
+                                    <td>@item.PhoneNumber</td>
                                     <td>
-                                        <img src="@item.MenuImagePath" alt="category-item-picture">
-                                        <a asp-action="UploadPicture" asp-controller="Admin" asp-route-MenuId="@item.Id">
+                                        <img src="@item.ProfileImagePath" alt="customer-picture">
+                                        <a asp-action="UploadPicture" asp-controller="Admin" asp-route-Id="@item.Id">
                                             <button class="btn btn-dark btn-sm d-inline-flex">Upload Picture</button>
-                                        </a> <a asp-action="DeletePicture" asp-controller="Admin" asp-route-MenuId="@item.Id">
+                                        </a> <a asp-action="DeletePicture" asp-controller="Admin" asp-route-Id="@item.Id">
                                             <button class="btn btn-secondary btn-sm d-inline-flex">Delete Picture</button>
                                         </a>
                                     </td>
                                     <td>
-                                        <a asp-action="DeleteMenu" asp-controller="Admin" asp-route-MenuId="@item.Id">
-                                            <button class="btn btn-danger btn-sm d-inline-flex">Delete Menu</button>
+                                        <a asp-action="DeleteCustomer" asp-controller="Admin" asp-route-Id="@item.Id">
+                                            <button class="btn btn-danger btn-sm d-inline-flex">Delete Customer</button>
                                         </a>
 
                                     </td>
@@ -119,10 +124,10 @@
                     </tbody>
                 </table>
 
-                @if (Model != null && Model.Menu != null && Model.MenuList != null)
+                @if (Model != null && Model.AppUserCustomers != null && Model.AppUserCustomers != null)
                 {
-                    <a asp-action="AddMenu" asp-controller="Admin" asp-route-MenuId="@Model.Menu.Id">
-                        <button class="btn btn-dark btn-sm d-inline-flex">Add a New Menu</button>
+                    <a asp-action="AddCustomer" asp-controller="Admin" asp-route-Id="@Model.AppUserCustomer.Id">
+                        <button class="btn btn-dark btn-sm d-inline-flex">Add a New Customer</button>
                     </a>
                 }
 
