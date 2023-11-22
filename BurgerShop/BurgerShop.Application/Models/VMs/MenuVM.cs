@@ -10,6 +10,7 @@ namespace BurgerShop.Application.Models.VMs
 {
     public class MenuVM
     {
+        public Menu Menu { get; set; }
         public List<Menu> MenuList { get; set; }
 
         public List<Menu> AddedMenus { get; set; }
