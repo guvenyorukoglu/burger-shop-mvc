@@ -13,7 +13,7 @@ namespace BurgerShop.Presentation.Controllers
 {
     public class AdminController : Controller
     {
-        
+
         private static List<Menu> menuList = new List<Menu>();
 
         private static List<Extra> extras = new List<Extra>();
@@ -30,6 +30,36 @@ namespace BurgerShop.Presentation.Controllers
 
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMenu(Menu menu)
+        {
+            await _menuService.Delete(menu.Id);
+            return RedirectToAction("Menus");
+        }
+
+
+        public IActionResult DeleteMenu(Guid id)
+        {
+            return View(_menuService.GetById(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditMenu(Menu menu)
+        {
+            await _menuService.Update(menu);
+            return RedirectToAction("Menus");
+        }
+
+
+
+        public IActionResult EditMenu(Guid id)
+        {
+            return View(_menuService.GetById(id));
+        }
+
+
+
         public IActionResult Customers()
         {
             return View();
@@ -43,7 +73,7 @@ namespace BurgerShop.Presentation.Controllers
 
         public async Task<IActionResult> GetMenus()
         {
-            return View();            
+            return View();
         }
 
 
@@ -52,10 +82,7 @@ namespace BurgerShop.Presentation.Controllers
             return View();
         }
 
-        public IActionResult DeleteMenu()
-        {
-            return View();
-        }
+
 
         public IActionResult UploadPicture()
         {

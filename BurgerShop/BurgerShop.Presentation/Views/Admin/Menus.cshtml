@@ -4,7 +4,8 @@
 @model List<Menu>
 @{
     ViewData["Title"] = "Menus";
-   
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+
 }
 
 <head>
@@ -40,10 +41,13 @@
 
     <link rel="stylesheet" href="~/Content/adminstyle.css" />
 
+
+
 </head>
 
 
 <body>
+
 
 
     <header>
@@ -58,7 +62,7 @@
 
                 <h2 class="text-center title">Admin Dashboard</h2>
                 <ul class="fa-ul">
-                    
+
                     <li><i class="fa fa-list" aria-hidden="true"></i><a asp-action="Menus" asp-controller="Admin">MENUS</a></li>
                     <li><i class="fa fa-user-o" aria-hidden="true"></i><a asp-action="Customers" asp-controller="Admin">Users</a></li>
                     <li><i class="fa fa-rocket" aria-hidden="true"></i><a asp-action="Orders" asp-controller="Admin">ORDERS</a></li>
@@ -73,62 +77,105 @@
                 <h1>Admin Panel</h1>
                 <hr>
 
-                <table class="table-bordered w-100">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Name</th>
-                            <th>Size</th>
-                            <th>Price</th>
-                            <th>Image</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+               
+             @*   <div class="container">*@
+
+                    <table class="table-bordered w-100">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Size</th>
+                                <th>Price</th>
+                                <th>Image</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
 
-                        @if (Model != null)
-                        {
-                            foreach (var item in Model)
+                            @if (Model != null)
                             {
-                                <tr>
-                                    <td>@item.Id</td>
-                                    <td>@item.MenuName</td>
-                                    <td>@item.MenuSize.ToString()</td>
-                                    <td>@item.MenuPrice</td>
-                                    <td>
-                                        <img src="@item.MenuImagePath" alt="category-item-picture">
-                                        <a asp-action="UploadPicture" asp-controller="Admin" asp-route-MenuId="@item.Id">
-                                            <button class="btn btn-dark btn-sm d-inline-flex">Upload Picture</button>
-                                        </a> <a asp-action="DeletePicture" asp-controller="Admin" asp-route-MenuId="@item.Id">
-                                            <button class="btn btn-secondary btn-sm d-inline-flex">Delete Picture</button>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a asp-action="DeleteMenu" asp-controller="Admin" asp-route-MenuId="@item.Id">
-                                            <button class="btn btn-danger btn-sm d-inline-flex">Delete Menu</button>
-                                        </a>
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.MenuName</td>
+                                        <td>@item.MenuSize.ToString()</td>
+                                        <td>@item.MenuPrice</td>
+                                        <td>
+                                            <img src="@item.MenuImagePath" alt="category-item-picture">
 
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td>
+
+                                            <a asp-action="EditMenu" asp-controller="Admin" asp-route-id="@item.Id">
+                                                <button class="btn btn-secondary btn-sm d-inline-flex">Edit Menu</button>
+                                            </a>
+
+                                            <a asp-action="DeleteMenu" asp-controller="Admin" asp-route-id="@item.Id">
+                                                <button class="btn btn-danger btn-sm d-inline-flex">Delete Menu</button>
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
 
-            @if (Model != null)
-            {
-                <a asp-action="AddMenu" asp-controller="Admin">
-                    <button class="btn btn-dark btn-sm d-inline-flex">Add a New Menu</button>
-                </a>
-            }
+                @*</div>*@
 
 
-        </article>
-    </section>
+
+                @if (Model != null)
+                {
+                    <a asp-action="AddMenu" asp-controller="Admin">
+                        <button class="btn btn-dark btn-sm d-inline-flex">Add a New Menu</button>
+                    </a>
+                }
+
+
+            </article>
+        </section>
     }
+
+    <div class="pagination"></div>
+
+
+
+    <script src="~/Content/js/pagination.js"></script>
+
 
 </body>
 
 
+<style>
+    .container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
 
+    .container-item {
+        background-color: #212529;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        width: 30%;
+        margin-left: 35%;
+        margin-bottom: 30px;
+        z-index: 999;
+    }
+
+        .pagination a {
+            text-decoration: none;
+            color: white;
+            padding: 10px;
+            background-color: #212529;
+            font-size: 20px;
+        }
+</style>
