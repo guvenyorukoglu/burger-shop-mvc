@@ -1,15 +1,12 @@
 ﻿@using BurgerShop.Application.Models.VMs;
 @using BurgerShop.Domain.Entities.Concrete;
 @using BurgerShop.Domain.Enums;
-@model MenuVM
+@model List<Menu>
 @{
     ViewData["Title"] = "Menus";
    
 }
-@{
-    List<Menu> displayedMenus = Model.MenuList.Where(x => x != null && x.MenuSize == MenuSize.Small).ToList();
 
-}
 <head>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -62,9 +59,9 @@
                 <h2 class="text-center title">Admin Dashboard</h2>
                 <ul class="fa-ul">
                     
-                    <li><i class="fa fa-list" aria-hidden="true"></i><a asp-action="Menus" asp-controller="Admin" href="#">MENUS</a></li>
-                    <li><i class="fa fa-user-o" aria-hidden="true"></i><a asp-action="Customers" asp-controller="Admin" href="#">Users</a></li>
-                    <li><i class="fa fa-rocket" aria-hidden="true"></i><a asp-action="Orders" asp-controller="Admin" href="#">ORDERS</a></li>
+                    <li><i class="fa fa-list" aria-hidden="true"></i><a asp-action="Menus" asp-controller="Admin">MENUS</a></li>
+                    <li><i class="fa fa-user-o" aria-hidden="true"></i><a asp-action="Customers" asp-controller="Admin">Users</a></li>
+                    <li><i class="fa fa-rocket" aria-hidden="true"></i><a asp-action="Orders" asp-controller="Admin">ORDERS</a></li>
                     <li><i class="fa fa-pie-chart" aria-hidden="true"></i><a href="#">Statistics</a></li>
                     <li><i class="fa fa-cogs" aria-hidden="true"></i><a href="#">Settings</a></li>
                     <li><i class="fa fa-line-chart" aria-hidden="true"></i><a href="#">Analytics</a></li>
@@ -90,9 +87,9 @@
                     <tbody>
 
 
-                        @if (displayedMenus != null)
+                        @if (Model != null)
                         {
-                            foreach (var item in displayedMenus)
+                            foreach (var item in Model)
                             {
                                 <tr>
                                     <td>@item.Id</td>
@@ -119,9 +116,9 @@
                 </tbody>
             </table>
 
-            @if (Model != null && Model.Menu != null && Model.MenuList != null)
+            @if (Model != null)
             {
-                <a asp-action="AddMenu" asp-controller="Admin" asp-route-MenuId="@Model.Menu.Id">
+                <a asp-action="AddMenu" asp-controller="Admin">
                     <button class="btn btn-dark btn-sm d-inline-flex">Add a New Menu</button>
                 </a>
             }

@@ -13,19 +13,21 @@ namespace BurgerShop.Presentation.Controllers
 {
     public class AdminController : Controller
     {
+        
         private static List<Menu> menuList = new List<Menu>();
-       
-        private static List<Extra> extras = new List<Extra>();
-        private static IBaseService<Menu> _menuManager;
 
-        public AdminController(IBaseService<Menu> menuManager)
+        private static List<Extra> extras = new List<Extra>();
+        private static IBaseService<Menu> _menuService;
+
+        public AdminController(IBaseService<Menu> menuService)
         {
-            _menuManager = menuManager;
+            _menuService = menuService;
         }
 
-        public IActionResult Menus()
+        public async Task<IActionResult> Menus()
         {
-            return View();
+            return View(await _menuService.GetAll());
+
         }
 
         public IActionResult Customers()
@@ -41,23 +43,7 @@ namespace BurgerShop.Presentation.Controllers
 
         public async Task<IActionResult> GetMenus()
         {
-            
-            var menuVM = new MenuVM()
-            {
-                MenuList = await _menuManager.GetFilteredList(
-                    select: x => new Menu()
-                    {
-                        Id = x.Id,
-                        MenuName = x.MenuName,
-                        MenuPrice = x.MenuPrice,
-                        MenuSize = x.MenuSize,
-                        MenuImagePath = x.MenuImagePath
-                    },
-                    where: x => x.Status == Status.Active)
-
-            };
-
-            return View(menuVM);
+            return View();            
         }
 
 
