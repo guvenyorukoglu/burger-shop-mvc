@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <div class="container-item">
+    <div class="container-item min-vw-100">
         <nav class="navbar navbar-expand-sm">
             <a href="#" class="navbar-brand text-white">
                 <h2>Feane</h2>
@@ -26,10 +26,13 @@
                         <a class="nav-link text-white" asp-action="Index" asp-controller="Home">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" asp-action="Menu" asp-controller="Home">MENU</a>
+                        <a class="nav-link text-white" asp-action="Index" asp-controller="Menu">MENUS</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" asp-action="About" asp-controller="Home">ABOUT</a>
+                        <a class="nav-link text-white" asp-action="Index" asp-controller="Extra">SAUCES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-action="Index" asp-controller="Home">ABOUT</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">BOOK TABLE</a>
@@ -42,12 +45,11 @@
                            aria-hidden="true"
                            style="color: white"></i>
                     </a>
-                    <a asp-action="GetCart" asp-controller="Home" id="btn-cart" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <a asp-action="Index" asp-controller="Cart" id="btn-cart" >
                         <i class="fa fa-shopping-cart"
                            aria-hidden="true"
-                           style="color: white"></i><span id="cartItemCount">0</span>
+                           style="color: white"></i>
                     </a>
-
 
                     <a href="#">
                         <i class="fa fa-search"
