@@ -18,17 +18,38 @@ namespace BurgerShop.Presentation.Controllers
 
         private static List<Extra> extras = new List<Extra>();
         private static IBaseService<Menu> _menuService;
+        private static IBaseService<AppUser> _appUserService;
 
-        public AdminController(IBaseService<Menu> menuService)
+        public AdminController(IBaseService<Menu> menuService, IBaseService<AppUser> appUserService)
         {
             _menuService = menuService;
+            _appUserService = appUserService;
+
         }
+
+
+        // Menus Actions
 
         public async Task<IActionResult> Menus()
         {
             return View(await _menuService.GetAll());
 
         }
+
+        //TODO Create Metotları Servisten Getirilecek
+        public async Task<IActionResult> AddMenu()
+        {
+            return View();
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> AddMenu(Menu menu)
+        //{
+        //    await _menuService.Create(menu);
+        //    return RedirectToAction("Menus");
+        //}
+
+
 
 
         [HttpPost]
@@ -60,27 +81,60 @@ namespace BurgerShop.Presentation.Controllers
 
 
 
-        public IActionResult Customers()
+        // Customers Actions
+        public async Task<IActionResult> Customers()
+        {
+            return View(await _appUserService.GetAll());
+        }
+
+        //TODO Create Metotları Servisten Getirilecek
+        public async Task<IActionResult> AddCustomer()
         {
             return View();
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> AddCustomer(AppUser appUser)
+        //{
+        //    await _appUserService.Create(appUser);
+        //    return RedirectToAction("Customers");
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteCustomer(AppUser appUser)
+        {
+            await _appUserService.Delete(appUser.Id);
+            return RedirectToAction("Customers");
+        }
+
+
+        public IActionResult DeleteCustomer(Guid id)
+        {
+            return View(_appUserService.GetById(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCustomer(AppUser appUser)
+        {
+            await _appUserService.Update(appUser);
+            return RedirectToAction("Menus");
+        }
+
+
+        public IActionResult EditCustomer(Guid id)
+        {
+            return View(_appUserService.GetById(id));
+        }
+
+
+
+
 
         public IActionResult Orders()
         {
             return View();
         }
 
-
-        public async Task<IActionResult> GetMenus()
-        {
-            return View();
-        }
-
-
-        public IActionResult AddMenu()
-        {
-            return View();
-        }
 
 
 
