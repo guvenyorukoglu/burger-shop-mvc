@@ -1,4 +1,24 @@
-﻿/* Set rates + misc */
+﻿let listProductHTML = document.querySelector('.listProduct');
+
+
+listProductHTML.addEventListener('click', (event) => {
+    let positionClick = event.target;
+    if (positionClick.classList.contains('addCart')) {
+        alert('1');
+    }
+})
+
+
+
+
+
+
+
+
+
+
+
+/* Set rates + misc */
 var taxRate = 0.2;
 
 var fadeTime = 300;
