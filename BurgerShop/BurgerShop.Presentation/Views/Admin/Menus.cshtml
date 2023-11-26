@@ -1,0 +1,118 @@
+﻿@using BurgerShop.Application.Models.VMs;
+@using BurgerShop.Domain.Entities.Concrete;
+@using BurgerShop.Domain.Enums;
+@model List<Menu>
+@{
+    ViewData["Title"] = "Menus";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+
+}
+
+
+
+<body>
+
+
+
+    <header>
+        <h2>Admin Dashboard <a href="#"><i class="fa fa-user float-end"></i></a> </h2>
+
+    </header>
+
+   
+
+    @if (Model != null)
+    {
+        
+
+        <section class="row">
+            <article class="col-md-3 col-lg-2 article-left">
+
+                <h2 class="text-center title">Admin Dashboard</h2>
+                <ul class="fa-ul">
+
+                    <li><i class="fa fa-list" aria-hidden="true"></i><a asp-action="Menus" asp-controller="Admin">MENUS</a></li>
+                    <li><i class="fa fa-user-o" aria-hidden="true"></i><a asp-action="Customers" asp-controller="Admin">CUSTOMERS</a></li>
+                    <li><i class="fa fa-rocket" aria-hidden="true"></i><a asp-action="Orders" asp-controller="Admin">ORDERS</a></li>
+                    <li><i class="fa fa-pie-chart" aria-hidden="true"></i><a href="#">Statistics</a></li>
+                    <li><i class="fa fa-cogs" aria-hidden="true"></i><a href="#">Settings</a></li>
+                    <li><i class="fa fa-line-chart" aria-hidden="true"></i><a href="#">Analytics</a></li>
+                    <li><i class="fa fa-facebook" aria-hidden="true"></i><a href="#">Social</a></li>
+                    <li><i class="fa fa-rss" aria-hidden="true"></i><a href="#">Feedback</a></li>
+                </ul>
+            </article>
+            <article class="col-md-10 article-right">
+                <h1>Admin Panel</h1>
+                <div class="search-bar" style="display:flex">
+                    <input type="text" id="searchInput" placeholder="Search by name"><i class="fas fa-search mt-2"></i>
+                </div>
+                <hr>
+
+               
+              
+
+                    <table class="table-bordered w-100">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Size</th>
+                                <th>Price</th>
+                                <th>Image</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.MenuName</td>
+                                        <td>@item.MenuSize.ToString()</td>
+                                        <td>@item.MenuPrice</td>
+                                        <td>
+                                            <img src="@item.MenuImagePath" alt="menu-picture">
+
+                                        </td>
+                                        <td>
+
+                                            <a asp-action="EditMenu" asp-controller="Admin" asp-route-id="@item.Id">
+                                            <button class="btn btn-secondary btn-sm d-inline-flex"><i class="fa fa-pen"></i></button>
+                                            </a>
+
+                                            <a asp-action="DeleteMenu" asp-controller="Admin" asp-route-id="@item.Id">
+                                                <button class="btn btn-danger btn-sm d-inline-flex"><i class="fa fa-trash"></i></button>
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+               
+
+
+
+                @if (Model != null)
+                {
+                    <a asp-action="AddMenu" asp-controller="Admin">
+                        <button class="btn btn-dark btn-sm d-inline-flex">Add a New Menu</button>
+                    </a>
+                }
+
+
+            </article>
+        </section>
+    }
+
+    <div class="pagination"></div>
+
+</body>
+
+
