@@ -1,5 +1,6 @@
 using BurgerShop.Application.Services.Abstract;
 using BurgerShop.Application.Services.Concrete;
+using BurgerShop.Application.Services.MenuServices;
 using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Repositories;
 using BurgerShop.Infrastructure.Context;
@@ -11,9 +12,14 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSession();
+
+
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TarikSQL")));
+
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQL")));
 builder.Services.AddTransient<IBaseRepository<Address>, AddressRepository>()
                 .AddTransient<IBaseRepository<AppUser>, AppUserRepository>()
                 .AddTransient<IBaseRepository<Extra>, ExtraRepository>()
@@ -52,6 +58,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthentication();

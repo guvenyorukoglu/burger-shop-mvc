@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BurgerShop.Domain.Entities.Concrete
 {
-    public class Menu : BaseEntity, IEntity<Guid>
+    public class Menu : BaseEntity, IEntity<Guid>, IProduct
     {
         public Menu()
         {

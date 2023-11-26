@@ -1,19 +1,15 @@
-﻿using BurgerShop.Domain.Entities.Concrete;
-using BurgerShop.Infrastructure.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BurgerShop.Domain.Enums;
 
 namespace BurgerShop.Application.Models.VMs
 {
     public class MenuVM
     {
-        public List<Menu> MenuList { get; set; }
 
-        public List<Menu> AddedMenus { get; set; }
+        public Guid MenuId { get; set; }
+        public string MenuName { get; set; }
+        public decimal MenuPrice { get; set; }
+        public MenuSize MenuSize { get; set; }
+        public string MenuImagePath { get; set; }
 
-        public List<Extra> Extras { get; set; }
     }
 }
