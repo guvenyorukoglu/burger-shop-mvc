@@ -6,6 +6,7 @@ using BurgerShop.Domain.Repositories;
 using BurgerShop.Infrastructure.Context;
 using BurgerShop.Infrastructure.Repositories;
 using BurgerShop.Infrastructure.SeedData;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,8 @@ builder.Services.AddSession();
 
 
 builder.Services.AddControllersWithViews();
+
+
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQL")));
 builder.Services.AddTransient<IBaseRepository<Address>, AddressRepository>()
@@ -28,6 +31,18 @@ builder.Services.AddTransient<IBaseRepository<Address>, AddressRepository>()
                 .AddTransient<IBaseService<Menu>, MenuManager>()
                 .AddTransient<IBaseService<Order>, OrderManager>();
 
+builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequiredLength = 3;
+    options.Password.RequireNonAlphanumeric = false;
+
+}).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,15 +53,19 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseSession();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-SeedDataGenerator.Seed(app,100,2,5,3,3);
+
+SeedDataGenerator.Seed(app, 100, 2, 5, 3, 3);
 
 app.MapControllerRoute(
     name: "default",

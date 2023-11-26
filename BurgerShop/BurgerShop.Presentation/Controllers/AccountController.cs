@@ -22,7 +22,7 @@ namespace BurgerShop.Presentation.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Register()
+        public IActionResult Register( )
         {
             return View();
         }
@@ -141,3 +141,12 @@ namespace BurgerShop.Presentation.Controllers
 
     }
 }
+
+
+//ToDO: 1. AppUser Roller ve admin uyguluma çalıştığında veri tabanında oluşturulacak. 
+// 2. Yeni kullanıcı kayıt olduğunda rolü atanacak.
+// 3. Authorizationlar controllerlara tanımlanacak.
+// 4. Sipraiş verdiği zaman order o kullanıcının adına oluşturulacak.
+// 5. Profil edit düzenlenecek.(şifre düzenleme)
+// 6. Admin sayfası gözden geçirilecek.
+// 7. 
