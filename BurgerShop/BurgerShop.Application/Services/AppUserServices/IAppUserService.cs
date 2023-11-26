@@ -1,5 +1,7 @@
 ﻿using BurgerShop.Application.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace BurgerShop.Application.Services.AppUserServices
 {
@@ -14,5 +16,7 @@ namespace BurgerShop.Application.Services.AppUserServices
         Task UpdateUser(UpdateProfileDTO model);
 
         Task Logout();
+
+       
     }
 }
