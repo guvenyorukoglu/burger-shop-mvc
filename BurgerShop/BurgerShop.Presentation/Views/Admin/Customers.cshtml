@@ -87,11 +87,11 @@ Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
                                     </td>
                                     <td>
                                         <a asp-action="EditCustomer" asp-controller="Admin" asp-route-id="@item.Id">
-                                            <button class="btn btn-secondary btn-sm d-inline-flex">Edit</button>
+                                            <button class="btn btn-secondary btn-sm d-inline-flex"><i class="fa fa-pen"></i></button>
                                         </a>
 
                                         <a asp-action="DeleteCustomer" asp-controller="Admin" asp-route-id="@item.Id">
-                                            <button class="btn btn-danger btn-sm d-inline-flex">Delete</button>
+                                            <button class="btn btn-danger btn-sm d-inline-flex"><i class="fa fa-trash"></i></button>
                                         </a>
 
                                     </td>

@@ -51,7 +51,6 @@ namespace BurgerShop.Presentation.Controllers
 
 
 
-
         [HttpPost]
         public async Task<IActionResult> DeleteMenu(Menu menu)
         {
@@ -113,13 +112,6 @@ namespace BurgerShop.Presentation.Controllers
             return View(_appUserService.GetById(id));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> EditCustomer(AppUser appUser)
-        {
-            await _appUserService.Update(appUser);
-            return RedirectToAction("Menus");
-        }
-
 
         public IActionResult EditCustomer(Guid id)
         {
@@ -127,6 +119,12 @@ namespace BurgerShop.Presentation.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> EditCustomer(AppUser appUser)
+        {
+            await _appUserService.Update(appUser);
+            return RedirectToAction("Customers");
+        }
 
 
 

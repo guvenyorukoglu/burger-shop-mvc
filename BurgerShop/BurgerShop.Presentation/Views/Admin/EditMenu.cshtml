@@ -16,13 +16,10 @@
     <hr />
 <div class="container">
 
-  
-
-
 <hr />
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -45,9 +42,9 @@
 
             <div class="form-group">
                 <label asp-for="MenuPrice" class="control-label"></label>
-                <input asp-for="MenuPrice" class="form-control" />
+                <input type="number" value="@Model.MenuPrice" asp-for="MenuPrice" class="form-control" />
                 <span asp-validation-for="MenuPrice" class="text-danger"></span>
-            </div
+            </div>
 
             <div class="form-group">
                 <img src="@Model.MenuImagePath" alt="category-item-picture">
