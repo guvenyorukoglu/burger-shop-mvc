@@ -50,22 +50,23 @@
         var startIndex = (currentPage - 1) * itemsPerPage;
         var endIndex = startIndex + itemsPerPage;
     }
-    <div class="container gap-3 mt-5">
+    <input type="text" class="form-control w-25 mt-5" style="margin: 0 auto;" placeholder="Search..." onkeyup="Search()" id="search-bar">
+    <div class="container gap-3 mt-4" id="cards">
         @foreach (var menuItem in Model)
         {
             
-                <div class="col-lg-4 mt-4 listProduct">
+                <div class="col-lg-4 mt-4">
                     <div class="menu-box border bg-dark rounded-3">
                         <div id="our-menu" class="bg-light text-center">
                             <img class="img-fluid" style="width: 100%;" src="@menuItem.MenuImagePath" alt="" />
                         </div>
-                        <div class="container bg-dark text-white text-start p-4 rounded-bottom-3" style="display:flex; flex-direction:column">
-                            <h5 class="fs-3">@menuItem.MenuName (@menuItem.MenuSize)</h5>
+                        <div class="container bg-dark text-white text-start p-4 rounded-bottom-3 card-info" style="display:flex; flex-direction:column">
+                            <h5 class="fs-3 card-title">@menuItem.MenuName (@menuItem.MenuSize)</h5>
                             <hr>
                             <div class="d-flex justify-content-between align-items-center">
                                 <h6 class="text-start fs-3"><span class="menuPrice">@menuItem.MenuPrice</span> €</h6>
                                 <form method="post" asp-action="Buy" asp-controller="Cart" asp-route-id="@menuItem.MenuId" class="addToCartForm" id="addToCartForm">
-                                <button type="submit" id="btn-cart" class="btn btn-warning float-end rounded-5 pt-2 pb-2 addCart">
+                                <button type="submit" onclick="AddedToCart" id="btn-cart" class="btn btn-warning float-end rounded-5 pt-2 pb-2 addCart">
                                     <i class="fa fa-shopping-cart"></i>
                                 </button>
                             </form>
@@ -92,7 +93,6 @@
                 icon: "success"
             });
         }
-
     </script>
 
 </body>
