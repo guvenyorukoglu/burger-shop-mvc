@@ -76,7 +76,8 @@ namespace BurgerShop.Presentation.Controllers
 
                     List<Claim> claims = new List<Claim>();
                     claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()));
-                    claims.Add(new Claim("UserName", appUser.UserName));
+                    claims.Add(new Claim(ClaimTypes.Name, appUser.UserName));
+                    claims.Add(new Claim(ClaimTypes.Email, appUser.Email));
 
                     ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     ClaimsPrincipal principal = new ClaimsPrincipal(identity);
@@ -98,10 +99,10 @@ namespace BurgerShop.Presentation.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public async Task<IActionResult> Edit()
+        public async Task<IActionResult> EditProfile()
         {
             //TODO: Kontrol et çalışıp çalışmadığını. User.Identity.Name ile username kullanmak zorunda kalabiliriz.
-            AppUser appUser = await _userManager.FindByNameAsync(User.FindFirstValue("UserName"));
+            AppUser appUser = await _appUserService.GetSingleDefault(x => x.Id == Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)));
 
             UpdateProfileDTO userUpdateDTO = new UpdateProfileDTO()
             {
@@ -118,13 +119,12 @@ namespace BurgerShop.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(UpdateProfileDTO model)
+        public async Task<IActionResult> EditProfile(UpdateProfileDTO model)
         {
             if (ModelState.IsValid)
             {
                 //TODO: Kontrol et çalışıp çalışmadığını. User.Identity.Name ile username kullanmak zorunda kalabiliriz.
-                AppUser appUser = await _userManager.FindByNameAsync(User.FindFirstValue("UserName"));
-
+                AppUser appUser = await _appUserService.GetSingleDefault(x => x.Id == Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                 appUser.FirstName = model.FirstName;
                 appUser.LastName = model.LastName;
                 appUser.Email = model.Email;

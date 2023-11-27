@@ -20,7 +20,7 @@
     <div class="container">
         <div class="title">Edit Profile</div>
 
-        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="content">
+        <form asp-action="EditProfile" method="post" enctype="multipart/form-data" class="content">
             <div class="user-details">
                 <div class="input-box">
                     <span class="details">First Name</span>
@@ -52,11 +52,11 @@
                     <span asp-validation-for="ConfirmedPassword" class="text-danger"></span>
                 </div>
 
-                <div class="input-box">
+                @*<div class="input-box">
                     <span class="details">Profile Image</span>
                     <input asp-for="UploadPath" type="file" class="form-control" />
                     <span asp-validation-for="UploadPath" class="text-danger"></span>
-                </div>
+                </div>*@
             </div>
 
             <div class="button">
