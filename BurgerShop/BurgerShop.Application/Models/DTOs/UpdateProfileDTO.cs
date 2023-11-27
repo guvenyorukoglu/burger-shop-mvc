@@ -19,19 +19,19 @@ namespace BurgerShop.Application.Models.DTOs
         [CustomEmail(ErrorMessage = "Email is invalid!")]
         public string Email { get; set; }
 
-        [Required]
+        
         [StringLength(20, ErrorMessage = "Password must have more than 6 and less than 20 characters!")]
         [CustomPassword(ErrorMessage = "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character.")]
         public string Password { get; set; }
 
-        [Required]
+        
         [Compare(nameof(Password), ErrorMessage = "Passwords do not match!")]
         public string ConfirmedPassword { get; set; }
 
         public DateTime ModifiedDate => DateTime.Now;
-        public string ImagePath { get; set; }
+        //public string ImagePath { get; set; }
 
-        [PictureFileExtension]
-        public IFormFile UploadPath { get; set; }
+        //[PictureFileExtension]
+        //public IFormFile UploadPath { get; set; }
     }
 }
