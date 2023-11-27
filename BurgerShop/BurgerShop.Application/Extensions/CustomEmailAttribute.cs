@@ -19,7 +19,7 @@ namespace BurgerShop.Application.Extensions
             if (data.Split("@").Count() > 2) //birden fazla @ varsa geçersizdir.
                 return false;
 
-            if (data.EndsWith("@gmail.com") || data.EndsWith("@hotmail.com") || data.EndsWith("@yahoo.com") || data.EndsWith("@outlook.com"))
+            if (data.EndsWith("@gmail.com") || data.EndsWith("@hotmail.com") || data.EndsWith("@yahoo.com") || data.EndsWith("@outlook.com") || data.EndsWith("@admin.com"))
                 return true;
 
             return false;

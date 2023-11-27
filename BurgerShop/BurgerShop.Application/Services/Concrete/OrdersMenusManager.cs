@@ -3,9 +3,9 @@ using BurgerShop.Domain.Repositories;
 
 namespace BurgerShop.Application.Services.Concrete
 {
-    public class AppUserManager : BaseManager<AppUser>
+    public class OrdersMenusManager : BaseManager<OrdersMenus>
     {
-        public AppUserManager(IBaseRepository<AppUser> repository) : base(repository)
+        public OrdersMenusManager(IBaseRepository<OrdersMenus> repository) : base(repository)
         {
         }
     }

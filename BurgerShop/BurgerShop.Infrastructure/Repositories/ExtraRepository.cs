@@ -5,10 +5,8 @@ namespace BurgerShop.Infrastructure.Repositories
 {
     public class ExtraRepository : BaseRepository<Extra>
     {
-        private readonly AppDbContext _context;
         public ExtraRepository(AppDbContext context) : base(context)
         {
-            _context = context;
         }
 
     }

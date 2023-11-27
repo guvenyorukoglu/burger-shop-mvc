@@ -27,33 +27,38 @@
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="user-details">
                     <div class="input-box">
-                        <span class="details">İsim Soyisim</span>
-                        <input asp-for="FirstName" placeholder="İsim Soyisim Giriniz" required>
+                        <span class="details">FirstName</span>
+                        <input asp-for="FirstName" placeholder="Joe" required>
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="input-box">
-                        <span class="details">Kullanıcı Adı</span>
-                        <input asp-for="LastName" placeholder="Kullanıcı Adı Giriniz" required>
+                        <span class="details">LastName</span>
+                        <input asp-for="LastName" placeholder="Doe" required>
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="input-box">
                         <span class="details">Email</span>
-                        <input asp-for="Email" placeholder="Emailinizi Giriniz" required>
+                        <input asp-for="Email" placeholder="joe.doe@gmail.com" required>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="input-box">
-                        <span class="details">Şifre</span>
-                        <input asp-for="Password" type="password" placeholder="Şifrenizi Giriniz" required>
+                        <span class="details">UserName</span>
+                        <input asp-for="UserName" placeholder="hungryJoe" required>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Password</span>
+                        <input asp-for="Password" type="password" placeholder="Jdoe123+" required>
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="input-box">
-                        <span class="details">Şifre Onayla</span>
-                        <input asp-for="ConfirmedPassword" type="password" placeholder="Şifrenizi Onaylayın" required>
+                        <span class="details">Confirmed Password</span>
+                        <input asp-for="ConfirmedPassword" type="password" placeholder="Jdoe123+" required>
                         <span asp-validation-for="ConfirmedPassword" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="button">
-                    <input type="submit" value="Üye Ol" class="btn btn-primary" />
+                    <input type="submit" value="Register" class="btn btn-primary" />
                 </div>
             </form>
         </div>

@@ -3,9 +3,9 @@ using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Enums;
 using BurgerShop.Infrastructure.Context;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using static System.Net.WebRequestMethods;
 
 namespace BurgerShop.Infrastructure.SeedData
 {
@@ -18,6 +18,8 @@ namespace BurgerShop.Infrastructure.SeedData
         static List<Order> orders = new List<Order>();
         static List<OrdersMenus> ordersMenus = new List<OrdersMenus>();
         static List<OrdersExtras> ordersExtras = new List<OrdersExtras>();
+
+
 
         static string[] extraList = new[] { "Avocado Sauce", "Curry Mayo Sauce", "Spicy Remoulade Sauce", "Roasted Garlic-Balsamic Aioli Sauce", "Herbed Mayo Sauce", "Sriracha Sauce", "Roasted Bell Pepper Sauce", "Chipotle And Lime Mayo Sauce", "Garlicky Mayo Sauce", "Toasted Sesame And Soy Mayo Sauce", "Ketchup Sauce", "Mustard Sauce", "Buffalo Sauce", "Honey Mustard Sauce", "BBQ Sauce", "Chili Cheese Sauce", "Spicy Mustard Sauce", "Ranch Sauce", "Spicy Sauce" };
 
@@ -37,6 +39,7 @@ namespace BurgerShop.Infrastructure.SeedData
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 AppDbContext context = serviceScope.ServiceProvider.GetService<AppDbContext>();
+                IPasswordHasher<AppUser> passwordHasher = serviceScope.ServiceProvider.GetService<IPasswordHasher<AppUser>>();
 
                 context.Database.Migrate();
 
@@ -57,6 +60,7 @@ namespace BurgerShop.Infrastructure.SeedData
 
                 if (!context.Users.Any())
                 {
+
                     GetAppUserGenerator(maxUserCount);
                     context.Users.AddRange(users);
                     context.SaveChanges();
@@ -89,148 +93,154 @@ namespace BurgerShop.Infrastructure.SeedData
                     context.OrdersExtras.AddRange(ordersExtras);
                 }
                 context.SaveChanges();
-            
 
-            void GetExtraGenerator()
-            {
-                foreach (var extra in extraList)
+
+                void GetExtraGenerator()
                 {
-                    Extra extraFake = new Faker<Extra>()
-                            .RuleFor(e => e.Id, _ => Guid.NewGuid())
-                            .RuleFor(e => e.ExtraName, _ => extra)
-                            .RuleFor(e => e.ExtraPrice, f => f.Random.Decimal(1, 5))
-                            .RuleFor(e => e.CreatedDate, f => f.Date.Past(1))
-                            .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive)
-                            .RuleFor(e => e.ExtraImageUrl, (_,e) => "https://placehold.co/400?text=" + e.ExtraName + "&font=roboto");
-
-                    extras.Add(extraFake);
-                }
-            }
-
-            void GetMenuGenerator()
-            {
-                foreach (var menu in menuList)
-                {
-                    foreach (var menuSize in Enum.GetValues<MenuSize>())
+                    foreach (var extra in extraList)
                     {
-                        var menuFake = new Faker<Menu>()
+                        Extra extraFake = new Faker<Extra>()
                                 .RuleFor(e => e.Id, _ => Guid.NewGuid())
-                                .RuleFor(e => e.MenuName, _ => menu)
-                                .RuleFor(e => e.MenuPrice, f => f.Random.Decimal(8, 15))
-                                .RuleFor(e => e.MenuSize, _ => menuSize)
+                                .RuleFor(e => e.ExtraName, _ => extra)
+                                .RuleFor(e => e.ExtraPrice, f => f.Random.Decimal(1, 5))
                                 .RuleFor(e => e.CreatedDate, f => f.Date.Past(1))
                                 .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive)
-                                .RuleFor(e => e.MenuImagePath, (_, e) => "https://placehold.co/400?text=" + e.MenuName + "&font=roboto");
+                                .RuleFor(e => e.ExtraImageUrl, (_, e) => "https://placehold.co/400?text=" + e.ExtraName + "&font=roboto");
 
-                        menus.Add(menuFake);
+                        extras.Add(extraFake);
                     }
                 }
-            }
 
-            void GetAppUserGenerator(int maxUserCount)
-            {
-                var userFake = new Faker<AppUser>()
-                             .RuleFor(u => u.Id, _ => Guid.NewGuid())
-                             .RuleFor(u => u.CreatedDate, f => f.Date.Past(1))
-                             .RuleFor(u => u.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive)
-                             .RuleFor(u => u.BirthDate, f => f.Date.Between(new DateTime(1975, 01, 01), DateTime.Now.AddYears(-18)))
-                             .RuleFor(u => u.Gender, f => f.PickRandom<Gender>())
-                             .RuleFor(u => u.FirstName, f => f.Name.FirstName())
-                             .RuleFor(u => u.LastName, f => f.Name.LastName())
-                             .RuleFor(u => u.UserName, f => f.Person.UserName)
-                             .RuleFor(u => u.Email, f => f.Person.Email)
-                             .RuleFor(u => u.EmailConfirmed, f => f.Random.Bool(0.75f) ? true : false)
-                             .RuleFor(u => u.PhoneNumber, f => f.Person.Phone)
-                             .RuleFor(u => u.ProfileImagePath, _ => "https://picsum.photos/200");
-
-                users.AddRange(userFake.Generate(maxUserCount));
-            }
-
-            void GetAddressGenerator(int maxAddressPerUser)
-            {
-                foreach (var user in users)
+                void GetMenuGenerator()
                 {
-                    int randomAddressCount = new Random().Next(1, maxAddressPerUser);
-                    for (int i = 0; i < randomAddressCount; i++)
+                    foreach (var menu in menuList)
                     {
-                        var addressFake = new Faker<Address>()
-                                .RuleFor(o => o.Id, _ => Guid.NewGuid())
-                                .RuleFor(o => o.AppUserId, _ => user.Id)
-                                .RuleFor(o => o.FullAddress, f => f.Address.FullAddress())
-                                .RuleFor(o => o.CreatedDate, f => f.Date.Past(1))
-                                .RuleFor(o => o.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive);
+                        foreach (var menuSize in Enum.GetValues<MenuSize>())
+                        {
+                            var menuFake = new Faker<Menu>()
+                                    .RuleFor(e => e.Id, _ => Guid.NewGuid())
+                                    .RuleFor(e => e.MenuName, _ => menu)
+                                    .RuleFor(e => e.MenuPrice, f => f.Random.Decimal(8, 15))
+                                    .RuleFor(e => e.MenuSize, _ => menuSize)
+                                    .RuleFor(e => e.CreatedDate, f => f.Date.Past(1))
+                                    .RuleFor(e => e.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive)
+                                    .RuleFor(e => e.MenuImagePath, (_, e) => "https://placehold.co/400?text=" + e.MenuName + "&font=roboto");
 
-                        addresses.Add(addressFake.Generate());
+                            menus.Add(menuFake);
+                        }
                     }
                 }
 
-            }
-
-            void GetOrderGenerator(int maxOrderPerUser)
-            {
-                foreach (var user in users)
+                void GetAppUserGenerator(int maxUserCount)
                 {
-                    int randomOrderCount = new Random().Next(0, maxOrderPerUser);
-                    for (int i = 0; i < randomOrderCount; i++)
-                    {
-                        var orderFake = new Faker<Order>()
-                                .RuleFor(o => o.Id, _ => Guid.NewGuid())
-                                .RuleFor(o => o.AppUserId, _ => user.Id)
-                                .RuleFor(o => o.OrderQuantity, f => f.Random.Bool(0.9f) ? (short)1 : (short)2)
-                                .RuleFor(o => o.OrderStatus, f => f.PickRandom<OrderStatus>())
-                                .RuleFor(o => o.OrderDate, f => f.Date.Past(1))
-                                .RuleFor(o => o.ShippedDate, f => f.Date.Past(1))
-                                .RuleFor(o => o.Notes, f => f.Random.Bool(0.5f) ? f.Lorem.Sentence(5, 5) : default)
-                                .RuleFor(o => o.ShippedAddress, _ => context.Addresses.Where(x => x.AppUserId == user.Id).FirstOrDefault().FullAddress)
-                                .RuleFor(o => o.CreatedDate, f => f.Date.Past(1))
-                                .RuleFor(o => o.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive);
+                    var userFake = new Faker<AppUser>()
+                                 .RuleFor(u => u.Id, _ => Guid.NewGuid())
+                                 .RuleFor(u => u.CreatedDate, f => f.Date.Past(1))
+                                 .RuleFor(u => u.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive)
+                                 .RuleFor(u => u.BirthDate, f => f.Date.Between(new DateTime(1975, 01, 01), DateTime.Now.AddYears(-18)))
+                                 .RuleFor(u => u.Gender, f => f.PickRandom<Gender>())
+                                 .RuleFor(u => u.FirstName, f => f.Name.FirstName())
+                                 .RuleFor(u => u.LastName, f => f.Name.LastName())
+                                 .RuleFor(u => u.UserName, f => f.Person.UserName)
+                                 .RuleFor(u => u.Email, f => f.Person.Email)
+                                 .RuleFor(u => u.EmailConfirmed, f => f.Random.Bool(0.75f) ? true : false)
+                                 .RuleFor(u => u.PasswordHash, (_, u) => passwordHasher.HashPassword(u, "Test123+"))
+                                 .RuleFor(u => u.PhoneNumber, f => f.Person.Phone)
+                                 .RuleFor(u => u.SecurityStamp, _ => Guid.NewGuid().ToString())
+                                 .RuleFor(u => u.ProfileImagePath, _ => "https://picsum.photos/200");
 
-                        orders.Add(orderFake.Generate());
-                    }
+                    users.AddRange(userFake.Generate(maxUserCount));
                 }
-            }
 
-            void GetOrdersMenusGenerator(int maxMenuCount)
-            {
-                foreach (var order in orders)
+                void GetAddressGenerator(int maxAddressPerUser)
                 {
-                    var menusToSelect = menus.ToList();
-                    int randomMenuCount = new Random().Next(1, maxMenuCount);
-                    for (int i = 0; i < randomMenuCount; i++)
+                    foreach (var user in users)
                     {
-                        var selectMenu = new Random().Next(0, menusToSelect.Count);
-                        var ordersMenusFake = new Faker<OrdersMenus>()
-                                            .RuleFor(om => om.OrderId, order.Id)
-                                            .RuleFor(om => om.MenuId, menusToSelect[selectMenu].Id)
-                                            .RuleFor(om => om.MenuPrice, menusToSelect[selectMenu].MenuPrice)
-                                            .RuleFor(om => om.MenuQuantity, f => f.Random.Short(1, 5));
+                        int randomAddressCount = new Random().Next(1, maxAddressPerUser);
+                        for (int i = 0; i < randomAddressCount; i++)
+                        {
+                            var addressFake = new Faker<Address>()
+                                    .RuleFor(o => o.Id, _ => Guid.NewGuid())
+                                    .RuleFor(o => o.AppUserId, _ => user.Id)
+                                    .RuleFor(o => o.FullAddress, f => f.Address.FullAddress())
+                                    .RuleFor(o => o.CreatedDate, f => f.Date.Past(1))
+                                    .RuleFor(o => o.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive);
 
-                        ordersMenus.Add(ordersMenusFake.Generate());
-                        menusToSelect.Remove(menusToSelect[selectMenu]);
+                            addresses.Add(addressFake.Generate());
+                        }
                     }
-                }
-            }
 
-            void GetOrdersExtrasGenerator(int maxExtraCount)
-            {
-                foreach (var order in orders)
+                }
+
+                void GetOrderGenerator(int maxOrderPerUser)
                 {
-                    var extrasToSelect = extras.ToList();
-                    int randomExtraCount = new Random().Next(0, maxExtraCount);
-                    for (int i = 0; i < randomExtraCount; i++)
+                    foreach (var user in users)
                     {
-                        var selectExtra = new Random().Next(0, extrasToSelect.Count);
-                        var ordersExtrasFake = new Faker<OrdersExtras>()
-                                            .RuleFor(om => om.OrderId, order.Id)
-                                            .RuleFor(om => om.ExtraId, extrasToSelect[selectExtra].Id)
-                                            .RuleFor(om => om.ExtraPrice, extrasToSelect[selectExtra].ExtraPrice)
-                                            .RuleFor(om => om.ExtraQuantity, f => f.Random.Short(1, 3));
+                        int randomOrderCount = new Random().Next(0, maxOrderPerUser);
+                        for (int i = 0; i < randomOrderCount; i++)
+                        {
+                            var orderFake = new Faker<Order>()
+                                    .RuleFor(o => o.Id, _ => Guid.NewGuid())
+                                    .RuleFor(o => o.AppUserId, _ => user.Id)
+                                    .RuleFor(o => o.OrderQuantity, f => f.Random.Bool(0.9f) ? (short)1 : (short)2)
+                                    .RuleFor(o => o.OrderStatus, f => f.PickRandom<OrderStatus>())
+                                    .RuleFor(o => o.OrderDate, f => f.Date.Past(1))
+                                    .RuleFor(o => o.ShippedDate, f => f.Date.Past(1))
+                                    .RuleFor(o => o.Notes, f => f.Random.Bool(0.5f) ? f.Lorem.Sentence(5, 5) : default)
+                                    .RuleFor(o => o.ShippedAddress, _ => context.Addresses.Where(x => x.AppUserId == user.Id).FirstOrDefault().FullAddress)
+                                    .RuleFor(o => o.CreatedDate, f => f.Date.Past(1))
+                                    .RuleFor(o => o.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive);
 
-                        ordersExtras.Add(ordersExtrasFake.Generate());
-                        extrasToSelect.Remove(extrasToSelect[selectExtra]);
+                            orders.Add(orderFake.Generate());
+                        }
                     }
                 }
-            }
+
+                void GetOrdersMenusGenerator(int maxMenuCount)
+                {
+                    foreach (var order in orders)
+                    {
+                        var menusToSelect = menus.ToList();
+                        int randomMenuCount = new Random().Next(1, maxMenuCount);
+                        for (int i = 0; i < randomMenuCount; i++)
+                        {
+                            var selectMenu = new Random().Next(0, menusToSelect.Count);
+                            var ordersMenusFake = new Faker<OrdersMenus>()
+                                                .RuleFor(om => om.OrderId, order.Id)
+                                                .RuleFor(om => om.MenuId, menusToSelect[selectMenu].Id)
+                                                .RuleFor(om => om.MenuPrice, menusToSelect[selectMenu].MenuPrice)
+                                                .RuleFor(om => om.MenuQuantity, f => f.Random.Short(1, 5))
+                                                .RuleFor(om => om.CreatedDate, f => f.Date.Past(1))
+                                                .RuleFor(om => om.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive);
+
+                            ordersMenus.Add(ordersMenusFake.Generate());
+                            menusToSelect.Remove(menusToSelect[selectMenu]);
+                        }
+                    }
+                }
+
+                void GetOrdersExtrasGenerator(int maxExtraCount)
+                {
+                    foreach (var order in orders)
+                    {
+                        var extrasToSelect = extras.ToList();
+                        int randomExtraCount = new Random().Next(0, maxExtraCount);
+                        for (int i = 0; i < randomExtraCount; i++)
+                        {
+                            var selectExtra = new Random().Next(0, extrasToSelect.Count);
+                            var ordersExtrasFake = new Faker<OrdersExtras>()
+                                                .RuleFor(om => om.OrderId, order.Id)
+                                                .RuleFor(om => om.ExtraId, extrasToSelect[selectExtra].Id)
+                                                .RuleFor(om => om.ExtraPrice, extrasToSelect[selectExtra].ExtraPrice)
+                                                .RuleFor(om => om.ExtraQuantity, f => f.Random.Short(1, 3))
+                                                .RuleFor(om => om.CreatedDate, f => f.Date.Past(1))
+                                    .RuleFor(om => om.Status, f => f.Random.Bool(0.9f) ? Status.Active : Status.Passive);
+
+                            ordersExtras.Add(ordersExtrasFake.Generate());
+                            extrasToSelect.Remove(extrasToSelect[selectExtra]);
+                        }
+                    }
+                }
             }
 
         }
