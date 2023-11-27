@@ -1,8 +1,12 @@
 ﻿
 using Bogus.DataSets;
+using BurgerShop.Application.Models.DTOs;
 using BurgerShop.Application.Models.VMs;
 using BurgerShop.Application.Services.Abstract;
+using BurgerShop.Application.Services.AppUserServices;
 using BurgerShop.Application.Services.Concrete;
+using BurgerShop.Application.Services.MenuServices;
+using BurgerShop.Application.Services.OrderServices;
 using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Enums;
 using BurgerShop.Infrastructure.Repositories;
@@ -18,18 +22,32 @@ namespace BurgerShop.Presentation.Controllers
         private static List<Menu> menuList = new List<Menu>();
 
         private static List<Extra> extras = new List<Extra>();
-        private static IBaseService<Menu> _menuService;
+        private static IMenuService _menuService;
+        private static IOrderService _orderService;
+     
+       
+    
+        private static IBaseService<Menu> _baseService;
         private static IBaseService<AppUser> _appUserService;
+    
 
-        public AdminController(IBaseService<Menu> menuService, IBaseService<AppUser> appUserService)
+        public AdminController(IMenuService menuService, IBaseService<AppUser> appUserService, IBaseService<Menu> baseService, IOrderService orderService )
         {
+            _baseService = baseService;
             _menuService = menuService;
             _appUserService = appUserService;
+            _orderService = orderService;
+         
 
         }
 
 
-        // Menus Actions
+        // MENU ACTIONS
+
+        public IActionResult Index()
+        {
+            return RedirectToAction("Login","Account");
+        }
 
         public async Task<IActionResult> Menus()
         {
@@ -40,33 +58,34 @@ namespace BurgerShop.Presentation.Controllers
         //TODO Create Metotları Servisten Getirilecek
         public async Task<IActionResult> AddMenu()
         {
-            return View();
+            return View(new MenuDTO());
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddMenu(Menu menu)
-        //{
-        //    await _menuService.Create(menu);
-        //    return RedirectToAction("Menus");
-        //}
-
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteMenu(Menu menu)
+        public async Task<IActionResult> AddMenu(MenuDTO menu)
         {
-            await _menuService.Delete(menu.Id);
+            await _menuService.Create(menu);
             return RedirectToAction("Menus");
         }
 
 
         public IActionResult DeleteMenu(Guid id)
-        {
-            return View(_menuService.GetById(id));
+        { 
+            return View(_baseService.GetById(id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditMenu(Menu menu)
+        public async Task<IActionResult> DeleteMenu(MenuDTO menu)
+        {
+            await _baseService.Delete(menu.Id);
+            return RedirectToAction("Menus");
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditMenu(MenuDTO menu)
         {
             await _menuService.Update(menu);
             return RedirectToAction("Menus");
@@ -76,12 +95,12 @@ namespace BurgerShop.Presentation.Controllers
 
         public IActionResult EditMenu(Guid id)
         {
-            return View(_menuService.GetById(id));
+            return View(_baseService.GetById(id));
         }
 
 
 
-        // Customers Actions
+        // CUSTOMER ACTIONS
         public async Task<IActionResult> Customers()
         {
             return View(await _appUserService.GetAll());
@@ -90,15 +109,15 @@ namespace BurgerShop.Presentation.Controllers
         //TODO Create Metotları Servisten Getirilecek
         public async Task<IActionResult> AddCustomer()
         {
-            return View();
+            return View(new AppUser());
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddCustomer(AppUser appUser)
-        //{
-        //    await _appUserService.Create(appUser);
-        //    return RedirectToAction("Customers");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AddCustomer(AppUser appUser)
+        {
+            await _appUserService.Insert(appUser);
+            return RedirectToAction("Customers");
+        }
 
         [HttpPost]
         public async Task<IActionResult> DeleteCustomer(AppUser appUser)
@@ -129,9 +148,9 @@ namespace BurgerShop.Presentation.Controllers
 
 
 
-        public IActionResult Orders()
+        public async Task<IActionResult> Orders()
         {
-            return View();
+            return View(await _orderService.GetAll());
         }
 
 

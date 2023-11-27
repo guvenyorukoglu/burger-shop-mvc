@@ -2,6 +2,7 @@ using BurgerShop.Application.Services.Abstract;
 using BurgerShop.Application.Services.AppUserServices;
 using BurgerShop.Application.Services.Concrete;
 using BurgerShop.Application.Services.MenuServices;
+using BurgerShop.Application.Services.OrderServices;
 using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Enums;
 using BurgerShop.Domain.Repositories;
@@ -11,6 +12,7 @@ using BurgerShop.Infrastructure.SeedData;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 
 
 namespace BurgerShop.Presentation
@@ -44,7 +46,9 @@ namespace BurgerShop.Presentation
                             .AddTransient<IBaseService<Order>, OrderManager>()
                             .AddTransient<IBaseService<OrdersMenus>, OrdersMenusManager>()
                             .AddTransient<IBaseService<OrdersExtras>, OrdersExtrasManager>()
-                            .AddTransient<IAppUserService, AppUserService>();
+                            .AddTransient<IAppUserService, AppUserService>()
+                            .AddTransient<IMenuService, MenuService>()
+                            .AddTransient<IOrderService, OrderService>();
 
             builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
             {

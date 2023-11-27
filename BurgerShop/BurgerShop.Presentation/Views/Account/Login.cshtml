@@ -20,9 +20,9 @@
 </head>
 <body>
 
-    <div class="row">
+    <div class="row flex-column">
     <h2>Giriş Yap</h2>
-    </div>
+    
     <div class="row">
         <div class="col-md-12">
             <form asp-action="Login" asp-controller="Account" method="post">
@@ -52,6 +52,7 @@
                 <input type="hidden" asp-for="ReturnUrl" />
             </form>
         </div>
+    </div>
     </div>
 
     @section Scripts {

@@ -1,6 +1,6 @@
-﻿@using BurgerShop.Application.Models.VMs;
+﻿@using BurgerShop.Application.Models.DTOs;
 @using BurgerShop.Domain.Enums;
-@model MenuVM
+@model MenuDTO
 
 @{
     ViewData["Title"] = "AddMenu";
@@ -23,6 +23,7 @@
     <div class="col-md-12">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="MenuId" />
             <div class="form-group">
                 <label asp-for="MenuName" class="control-label"></label>
@@ -32,7 +33,8 @@
 
              <div class="form-group">
                   <label asp-for="MenuSize" class="control-label"></label>
-             <select name="Menu.MenuSize" id="menuSizes" class="form-select mb-5 menuSizes" data-MenuSize="menuSizeList">
+             <select name="MenuSize" id="menuSizes" class="form-select mb-5 menuSizes" data-MenuSize="menuSizeList">
+
                                 @foreach (var size in menuSizeList)
                                 {
                                     <option value="@size">@size</option>
@@ -55,15 +57,15 @@
                 <label asp-for="MenuImagePath" class="control-label"></label>
                 <input asp-for="MenuImagePath" class="form-control" />
                 <span asp-validation-for="MenuImagePath" class="text-danger"></span>
-                <a asp-action="UploadPicture" asp-controller="Admin" asp-route-MenuId="@Model.MenuId">
+
+                <a asp-action="UploadPicture" asp-controller="Admin" asp-route-MenuId="@Model.Id">
                     <button class="btn btn-dark btn-sm d-inline-flex m-3">Upload Picture</button>
-                </a> <a asp-action="DeletePicture" asp-controller="Admin" asp-route-MenuId="@Model.MenuId">
+                </a> <a asp-action="DeletePicture" asp-controller="Admin" asp-route-MenuId="@Model.Id">
+
+
                     <button class="btn btn-secondary btn-sm d-inline-flex m-3">Delete Picture</button>
                 </a>
             </div>
-
-
-
 
 
             <div class="form-group">
