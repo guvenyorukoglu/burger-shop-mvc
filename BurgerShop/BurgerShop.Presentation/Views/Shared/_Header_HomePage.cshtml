@@ -42,16 +42,17 @@
                     </ul>
 
                     <div class="user-account">
-                        <a href="#" class="user-link">
+                        <a asp-action="Login" asp-controller="Account" class="user-link">
                             <i class="fa fa-user"
                                aria-hidden="true"
                                style="color: white"></i>
                         </a>
-                        <a href="#">
+                        <a asp-action="Index" asp-controller="Cart" id="btn-cart">
                             <i class="fa fa-shopping-cart"
                                aria-hidden="true"
                                style="color: white"></i>
                         </a>
+
                         <a href="#">
                             <i class="fa fa-search"
                                aria-hidden="true"
@@ -59,9 +60,7 @@
                         </a>
                     </div>
 
-                    <button class="btn btn-warning text-center p-2 ps-4 pe-4 ms-4 rounded-4 text-white">
-                        Order Online
-                    </button>
+                    <a asp-action="Index" asp-controller="Menu" id="btn-cart" class="btn btn-warning text-white text-center p-2 ps-4 pe-4 ms-4 rounded-4">Order Online</a>
                 </div>
             </nav>
         </div>

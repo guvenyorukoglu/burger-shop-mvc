@@ -1,6 +1,8 @@
 using BurgerShop.Application.Services.Abstract;
+using BurgerShop.Application.Services.AppUserServices;
 using BurgerShop.Application.Services.Concrete;
 using BurgerShop.Application.Services.MenuServices;
+using BurgerShop.Application.Services.OrderServices;
 using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Repositories;
 using BurgerShop.Infrastructure.Context;
@@ -19,7 +21,7 @@ builder.Services.AddControllersWithViews();
 
 
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("GuvenSQL")));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TolgaSQL")));
 builder.Services.AddTransient<IBaseRepository<Address>, AddressRepository>()
                 .AddTransient<IBaseRepository<AppUser>, AppUserRepository>()
                 .AddTransient<IBaseRepository<Extra>, ExtraRepository>()
@@ -29,7 +31,16 @@ builder.Services.AddTransient<IBaseRepository<Address>, AddressRepository>()
                 .AddTransient<IBaseService<AppUser>, AppUserManager>()
                 .AddTransient<IBaseService<Extra>, ExtraManager>()
                 .AddTransient<IBaseService<Menu>, MenuManager>()
-                .AddTransient<IBaseService<Order>, OrderManager>();
+                .AddTransient<IBaseService<Order>, OrderManager>()
+                .AddTransient<IMenuService, MenuService>()
+                .AddTransient<IOrderService, OrderService>();
+
+
+
+
+
+
+
 
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
 {

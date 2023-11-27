@@ -1,4 +1,6 @@
 ﻿using BurgerShop.Domain.Enums;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BurgerShop.Application.Models.VMs
 {
@@ -10,6 +12,7 @@ namespace BurgerShop.Application.Models.VMs
         public decimal MenuPrice { get; set; }
         public MenuSize MenuSize { get; set; }
         public string MenuImagePath { get; set; }
+       
 
     }
 }
