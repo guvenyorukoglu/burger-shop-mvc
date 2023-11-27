@@ -53,16 +53,26 @@
                 </div>
 
                 @*<div class="input-box">
-                    <span class="details">Profile Image</span>
-                    <input asp-for="UploadPath" type="file" class="form-control" />
-                    <span asp-validation-for="UploadPath" class="text-danger"></span>
+                <span class="details">Profile Image</span>
+                <input asp-for="UploadPath" type="file" class="form-control" />
+                <span asp-validation-for="UploadPath" class="text-danger"></span>
                 </div>*@
             </div>
 
             <div class="button">
                 <input type="submit" value="Save Changes" class="btn btn-primary" />
             </div>
+
+
         </form>
+
+    
+
+           
+           <a asp-action="Index" asp-controller="Address">Address </a>
+          
+
+       
     </div>
 
 </body>
