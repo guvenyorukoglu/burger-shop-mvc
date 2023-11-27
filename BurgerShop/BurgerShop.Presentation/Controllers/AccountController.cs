@@ -72,6 +72,7 @@ namespace BurgerShop.Presentation.Controllers
                 var result = await _userService.Login(model);
                 if (result.Succeeded)
                 {
+                    
                     AppUser appUser = await _appUserService.GetSingleDefault(x => x.Email == model.Email);
 
                     List<Claim> claims = new List<Claim>();
@@ -86,7 +87,8 @@ namespace BurgerShop.Presentation.Controllers
 
                     return Redirect(model.ReturnUrl ?? "/");
                 }
-                ModelState.AddModelError("", "Wrong credential information..");
+                else
+                    ModelState.AddModelError("", "Wrong credential information..");
             }
 
             return View(model);

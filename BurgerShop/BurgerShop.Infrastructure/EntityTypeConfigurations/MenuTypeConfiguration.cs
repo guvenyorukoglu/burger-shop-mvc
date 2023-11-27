@@ -15,7 +15,7 @@ namespace BurgerShop.Infrastructure.EntityTypeConfigurations
             builder.Property(m => m.MenuPrice)
                 .IsRequired()
                 .HasColumnType("decimal(4,2)")
-                .HasPrecision(4, 2);
+                .HasPrecision(6, 2);
 
             builder.HasAlternateKey(m => new { m.MenuName, m.MenuSize });
         }

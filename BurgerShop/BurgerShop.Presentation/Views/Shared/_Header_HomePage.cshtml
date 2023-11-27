@@ -44,9 +44,9 @@
                     {
                         <div class="user-account">
                             <a asp-action="EditProfile" asp-controller="Account" class="user-link">
-                                <i class="fa fa-user"
+                                @User.Identity.Name<i class="fa fa-user ms-2"
                                    aria-hidden="true"
-                                   style="color: #ffc107"></i>@* @User.FindFirst("UserName").Value *@
+                                   style="color: #ffc107"></i>
                             </a>
                             <a asp-action="Index" asp-controller="Cart">
                                 <i class="fa fa-shopping-cart"

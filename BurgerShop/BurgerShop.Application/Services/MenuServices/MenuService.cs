@@ -31,7 +31,9 @@ namespace BurgerShop.Application.Services.MenuServices
                     Id = menu.Id,
                     MenuName = menu.MenuName,
                     MenuPrice = menu.MenuPrice,
-                    MenuSize = menu.MenuSize
+                    MenuSize = menu.MenuSize,
+                    MenuImagePath = menu.MenuImagePath,
+                    Status = menu.Status,
                 };
 
                 menuDTOs.Add(menuDTO);
@@ -55,6 +57,10 @@ namespace BurgerShop.Application.Services.MenuServices
         public async Task Update(MenuDTO model)
         {
             Menu menu = await _menuRepository.GetDefault(x => x.Id == model.Id);
+            menu.MenuPrice = model.MenuPrice;
+            menu.MenuImagePath = model.MenuImagePath;
+            menu.ModifiedDate = DateTime.Now;
+
             await _menuRepository.Update(menu);
         }
     }
