@@ -1,4 +1,5 @@
 ﻿using BurgerShop.Domain.Entities.Concrete;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,6 +9,7 @@ namespace BurgerShop.Infrastructure.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
+            
 
             builder.Property(u => u.FirstName).IsRequired().HasMaxLength(20);
             builder.Property(u => u.LastName).IsRequired().HasMaxLength(30);

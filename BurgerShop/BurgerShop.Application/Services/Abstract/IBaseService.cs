@@ -51,6 +51,8 @@ namespace BurgerShop.Application.Services.Abstract
         /// <returns>Null if element is not found; otherwise, the first element in source.</returns>
         Task<T> GetDefault(Expression<Func<T, bool>> expression);
 
+        Task<T> GetSingleDefault(Expression<Func<T, bool>> expression);
+
         /// <summary>
         /// Returns the list of the elements of a sequence.
         /// </summary>

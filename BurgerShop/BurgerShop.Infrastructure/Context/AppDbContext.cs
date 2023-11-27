@@ -8,6 +8,7 @@ namespace BurgerShop.Infrastructure.Context
 {
     public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     {
+        
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }

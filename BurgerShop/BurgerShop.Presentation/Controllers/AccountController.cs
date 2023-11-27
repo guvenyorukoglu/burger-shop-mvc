@@ -1,5 +1,9 @@
 ﻿using BurgerShop.Application.Models.DTOs;
+using BurgerShop.Application.Services.Abstract;
+using BurgerShop.Application.Services.AppUserServices;
 using BurgerShop.Domain.Entities.Concrete;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,35 +15,32 @@ namespace BurgerShop.Presentation.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
         private readonly IPasswordHasher<AppUser> _passwordHasher;
+        private readonly IBaseService<AppUser> _appUserService;
+        private readonly IAppUserService _userService;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IPasswordHasher<AppUser> passwordHasher)
+        public AccountController(UserManager<AppUser> userManager, IPasswordHasher<AppUser> passwordHasher, IBaseService<AppUser> appUserService, IAppUserService userService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _passwordHasher = passwordHasher;
+            _appUserService = appUserService;
+            _userService = userService;
         }
 
         [AllowAnonymous]
-        public IActionResult Register( )
+        public IActionResult Register()
         {
             return View();
         }
 
-        [HttpPost, AllowAnonymous]
+        [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterDTO model)
         {
             if (ModelState.IsValid)
             {
-                AppUser appUser = new AppUser()
-                {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email
-                };
+                IdentityResult identityResult = await _userService.Register(model);
 
-                IdentityResult identityResult = await _userManager.CreateAsync(appUser, model.Password);
                 if (identityResult.Succeeded)
                 {
                     return RedirectToAction("Login");
@@ -58,41 +59,49 @@ namespace BurgerShop.Presentation.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
-            returnUrl = returnUrl is null ? "~/Views/Home/Index" : returnUrl;
+            returnUrl = returnUrl is null ? "/Home/Index" : returnUrl;
             return View(new LoginDTO() { ReturnUrl = returnUrl });
         }
 
-        [HttpPost, AllowAnonymous]
+        [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginDTO model)
         {
             if (ModelState.IsValid)
             {
-                AppUser appUser = await _userManager.FindByEmailAsync(model.Email);
-                if (appUser != null)
+                var result = await _userService.Login(model);
+                if (result.Succeeded)
                 {
-                    Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(appUser.Email, model.Password, false, false);
-                    if (result.Succeeded)
-                    {
-                        return Redirect(model.ReturnUrl ?? "/");
-                    }
+                    AppUser appUser = await _appUserService.GetSingleDefault(x => x.Email == model.Email);
 
-                    ModelState.AddModelError("", "Wrong credential information..");
+                    List<Claim> claims = new List<Claim>();
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, appUser.Id.ToString()));
+                    claims.Add(new Claim("UserName", appUser.UserName));
+
+                    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                    return Redirect(model.ReturnUrl ?? "/");
                 }
+                ModelState.AddModelError("", "Wrong credential information..");
             }
 
             return View(model);
         }
 
+
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("~/Views/Home/Index");
+            await _userService.Logout();
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Edit()
         {
             //TODO: Kontrol et çalışıp çalışmadığını. User.Identity.Name ile username kullanmak zorunda kalabiliriz.
-            AppUser appUser = await _userManager.FindByNameAsync(User.FindFirstValue(ClaimTypes.Email));
+            AppUser appUser = await _userManager.FindByNameAsync(User.FindFirstValue("UserName"));
 
             UpdateProfileDTO userUpdateDTO = new UpdateProfileDTO()
             {
@@ -114,7 +123,7 @@ namespace BurgerShop.Presentation.Controllers
             if (ModelState.IsValid)
             {
                 //TODO: Kontrol et çalışıp çalışmadığını. User.Identity.Name ile username kullanmak zorunda kalabiliriz.
-                AppUser appUser = await _userManager.FindByNameAsync(User.FindFirstValue(ClaimTypes.Email));
+                AppUser appUser = await _userManager.FindByNameAsync(User.FindFirstValue("UserName"));
 
                 appUser.FirstName = model.FirstName;
                 appUser.LastName = model.LastName;
@@ -141,12 +150,3 @@ namespace BurgerShop.Presentation.Controllers
 
     }
 }
-
-
-//ToDO: 1. AppUser Roller ve admin uyguluma çalıştığında veri tabanında oluşturulacak. 
-// 2. Yeni kullanıcı kayıt olduğunda rolü atanacak.
-// 3. Authorizationlar controllerlara tanımlanacak.
-// 4. Sipraiş verdiği zaman order o kullanıcının adına oluşturulacak.
-// 5. Profil edit düzenlenecek.(şifre düzenleme)
-// 6. Admin sayfası gözden geçirilecek.
-// 7. 

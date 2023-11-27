@@ -1,6 +1,6 @@
 ﻿namespace BurgerShop.Domain.Entities.Concrete
 {
-    public class OrdersExtras
+    public class OrdersExtras : BaseEntity
     {
         private decimal _extraPrice;
         public decimal ExtraPrice

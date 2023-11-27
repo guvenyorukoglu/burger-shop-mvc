@@ -1,13 +1,6 @@
-﻿using AutoMapper;
-using BurgerShop.Application.Models.DTOs;
+﻿using BurgerShop.Application.Models.DTOs;
 using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Repositories;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BurgerShop.Application.Services.MenuServices
 {
@@ -22,7 +15,7 @@ namespace BurgerShop.Application.Services.MenuServices
         public async Task Delete(Guid id)
         {
             Menu menu = await _menuRepository.GetDefault(x => x.Id == id);
-            
+
         }
 
         public async Task<List<MenuDTO>> GetAll()
@@ -56,7 +49,7 @@ namespace BurgerShop.Application.Services.MenuServices
                 MenuImagePath = model.MenuImagePath
             };
 
-             await _menuRepository.Insert(menu);
+            await _menuRepository.Insert(menu);
         }
 
         public async Task Update(MenuDTO model)

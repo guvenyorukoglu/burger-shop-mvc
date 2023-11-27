@@ -1,6 +1,8 @@
-﻿namespace BurgerShop.Domain.Entities.Concrete
+﻿using BurgerShop.Domain.Entities.Abstract;
+
+namespace BurgerShop.Domain.Entities.Concrete
 {
-    public class OrdersMenus
+    public class OrdersMenus : BaseEntity
     {
         private decimal _menuPrice;
 

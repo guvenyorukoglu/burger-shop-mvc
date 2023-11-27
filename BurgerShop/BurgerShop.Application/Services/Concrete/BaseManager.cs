@@ -59,6 +59,11 @@ namespace BurgerShop.Application.Services.Concrete
             return await _repository.GetFilteredList(select, where, orderBy, include);
         }
 
+        public async Task<T> GetSingleDefault(Expression<Func<T, bool>> expression)
+        {
+            return await _repository.GetSingleDefault(expression);
+        }
+
         public Task Insert(T entity)
         {
             return _repository.Insert(entity);

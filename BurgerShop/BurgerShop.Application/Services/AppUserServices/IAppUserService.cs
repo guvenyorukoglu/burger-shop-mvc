@@ -1,4 +1,5 @@
 ﻿using BurgerShop.Application.Models.DTOs;
+using BurgerShop.Domain.Entities.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -17,6 +18,7 @@ namespace BurgerShop.Application.Services.AppUserServices
 
         Task Logout();
 
-       
+        
+
     }
 }
