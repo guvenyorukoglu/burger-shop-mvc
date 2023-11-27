@@ -1,22 +1,34 @@
 ﻿using BurgerShop.Application.Models.VMs;
 using BurgerShop.Application.Services.Abstract;
 using BurgerShop.Domain.Entities.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BurgerShop.Presentation.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private static IBaseService<Menu> _menuService;
         private static IBaseService<Extra> _extraService;
+        private readonly IBaseService<Address> _addressService;
+        private readonly IBaseService<Order> _orderService;
+        private readonly IBaseService<OrdersMenus> _ordersMenusService;
+        private readonly IBaseService<OrdersExtras> _ordersExtrasService;
 
-        public CartController(IBaseService<Menu> menuService, IBaseService<Extra> extraService)
+
+        public CartController(IBaseService<Menu> menuService, IBaseService<Extra> extraService, IBaseService<Address> addressService, IBaseService<Order> orderService, IBaseService<OrdersMenus> ordersMenusService, IBaseService<OrdersExtras> ordersExtrasService)
         {
             _menuService = menuService;
             _extraService = extraService;
+            _addressService = addressService;
+            _orderService = orderService;
+            _ordersMenusService = ordersMenusService;
+            _ordersExtrasService = ordersExtrasService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             List<CartItemVM> cart = HttpContext.Session.Get<List<CartItemVM>>("cart");
             if (cart != null)
@@ -29,6 +41,8 @@ namespace BurgerShop.Presentation.Controllers
                 ViewBag.total = 0;
             }
 
+
+            ViewBag.Addresses = await _addressService.GetDefaults(x => x.AppUserId == Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
             return View(cart);
         }
 
@@ -146,7 +160,7 @@ namespace BurgerShop.Presentation.Controllers
         {
             //var product = _menuService.GetById(id);
             var cart = HttpContext.Session.Get<List<CartItemVM>>("cart");
-            
+
             int index = cart.FindIndex(w => w.Id == id);
 
             if (cart[index].Quantity == 1) //last item of a product
@@ -167,13 +181,60 @@ namespace BurgerShop.Presentation.Controllers
         {
             //var product = _menuService.GetById(id);
             var cart = HttpContext.Session.Get<List<CartItemVM>>("cart");
-            
+
             int index = cart.FindIndex(w => w.Id == id);
             cart.RemoveAt(index);
-            
+
             HttpContext.Session.Set<List<CartItemVM>>("cart", cart);
-            
+
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Order(string selectedAddressId)
+        {
+            var cart = HttpContext.Session.Get<List<CartItemVM>>("cart");
+
+            Guid addressId = Guid.Parse(selectedAddressId);
+
+            Order newOrder = new Order()
+            {
+                AppUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value),
+                ShippedAddress = _addressService.GetById(addressId).FullAddress,
+            };
+            await _orderService.Insert(newOrder);
+
+
+            foreach (var item in cart)
+            {
+                Menu menuItem = await _menuService.GetDefault(x => x.Id == item.Id);
+                if (menuItem != null) //eğer menu ise
+                {
+                    OrdersMenus ordersMenus = new OrdersMenus()
+                    {
+                        OrderId = newOrder.Id,
+                        MenuId = item.Id,
+                        MenuPrice = item.Price,
+                        MenuQuantity = (short)item.Quantity
+                    };
+                    await _ordersMenusService.Insert(ordersMenus);
+
+                }
+                else //eğer extra ise  
+                {
+                    OrdersExtras ordersExtras = new OrdersExtras()
+                    {
+                        OrderId = newOrder.Id,
+                        ExtraId = item.Id,
+                        ExtraPrice = item.Price,
+                        ExtraQuantity = (short)item.Quantity
+                    };
+                    await _ordersExtrasService.Insert(ordersExtras);
+                }
+            }
+            HttpContext.Session.Clear(); //Clear the Cart
+
+            return RedirectToAction("Index", "Home"); //TODO: OrderPlace adında başka bir View oluşturulabilir.
         }
     }
 }

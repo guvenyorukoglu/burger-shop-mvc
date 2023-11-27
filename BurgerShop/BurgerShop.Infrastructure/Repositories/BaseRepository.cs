@@ -99,6 +99,9 @@ namespace BurgerShop.Infrastructure.Repositories
            return table.Find(id);
         }
 
-        
+        public async Task<T> GetSingleDefault(Expression<Func<T, bool>> expression)
+        {
+            return await table.SingleOrDefaultAsync(expression);
+        }
     }
 }

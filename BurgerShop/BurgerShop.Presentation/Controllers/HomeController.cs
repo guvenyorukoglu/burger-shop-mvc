@@ -1,18 +1,21 @@
-﻿using BurgerShop.Application.Models.VMs;
-using BurgerShop.Application.Services.Abstract;
+﻿using BurgerShop.Application.Services.Abstract;
 using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BurgerShop.Presentation.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
-        public HomeController()
+        public IActionResult Index()
         {
+            return View();
         }
 
-        public IActionResult Index()
+        public IActionResult AccessDenied()
         {
             return View();
         }

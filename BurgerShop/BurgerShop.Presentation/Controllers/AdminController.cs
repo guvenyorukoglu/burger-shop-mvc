@@ -6,11 +6,12 @@ using BurgerShop.Application.Services.Concrete;
 using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Enums;
 using BurgerShop.Infrastructure.Repositories;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BurgerShop.Presentation.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
 
