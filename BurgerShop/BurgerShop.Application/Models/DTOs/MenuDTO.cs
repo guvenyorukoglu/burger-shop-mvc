@@ -24,5 +24,7 @@ namespace BurgerShop.Application.Models.DTOs
         [NotMapped]
         public IFormFile MenuUploadPath { get; set; }
 
+        public Status Status { get; set; }
+
     }
 }
