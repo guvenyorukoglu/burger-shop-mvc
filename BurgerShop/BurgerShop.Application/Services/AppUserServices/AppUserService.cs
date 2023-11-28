@@ -1,11 +1,9 @@
 ﻿using BurgerShop.Application.Models.DTOs;
+using BurgerShop.Application.Models.VMs;
 using BurgerShop.Domain.Entities.Concrete;
 using BurgerShop.Domain.Repositories;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace BurgerShop.Application.Services.AppUserServices
 {
@@ -14,13 +12,37 @@ namespace BurgerShop.Application.Services.AppUserServices
         private readonly IBaseRepository<AppUser> _repository;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IPasswordHasher<AppUser> _passwordHasher;
 
-        public AppUserService(IBaseRepository<AppUser> repository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
+        public AppUserService(IBaseRepository<AppUser> repository, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IPasswordHasher<AppUser> passwordHasher)
         {
             _repository = repository;
             _signInManager = signInManager;
             _userManager = userManager;
+            _passwordHasher = passwordHasher;
         }
+
+        public async Task Create(CustomerDTO model)
+        {
+            AppUser newUser = new AppUser();
+            newUser.FirstName = model.FirstName;
+            newUser.LastName = model.LastName;
+            newUser.Gender = model.Gender;
+            newUser.BirthDate = model.BirthDate;
+            newUser.PhoneNumber = model.Phone;
+            newUser.ProfileImagePath = model.ProfileImagePath;
+            newUser.Status = Domain.Enums.Status.Active;
+            newUser.CreatedDate = DateTime.Now;
+            newUser.UserName = model.UserName;
+            newUser.NormalizedEmail = model.UserName.ToUpper();
+            newUser.Email = model.Email;
+            newUser.NormalizedEmail = model.Email.ToUpper();
+            newUser.SecurityStamp = Guid.NewGuid().ToString();
+
+            newUser.PasswordHash = _passwordHasher.HashPassword(newUser, model.Password);
+            await _repository.Insert(newUser);
+        }
+
         public async Task<UpdateProfileDTO> GetByUserName(string userName)
         {
             UpdateProfileDTO result = await _repository.GetFilteredFirstOrDefault(
@@ -36,6 +58,31 @@ namespace BurgerShop.Application.Services.AppUserServices
                 where: x => x.UserName == userName
                 );
             return result;
+        }
+
+        public async Task<List<CustomerVM>> GetCustomers()
+        {
+            return await (_repository.GetFilteredList(
+                select: x => new CustomerVM()
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Gender = x.Gender,
+                    BirthDate = x.BirthDate,
+                    Phone = x.PhoneNumber,
+                    ProfileImagePath = x.ProfileImagePath,
+                    Status = x.Status,
+                    CreatedDate = x.CreatedDate,
+                    ModifiedDate = x.ModifiedDate,
+                    DeletedDate = x.DeletedDate,
+                    Orders = x.Orders,
+                    Addresses = x.Addresses
+                },
+                where: x => x.Email != "admin@admin.com",
+                orderBy: x => x.OrderByDescending(x => x.CreatedDate),
+                include: x => x.Include(x => x.Orders).Include(x => x.Addresses)
+                ));
         }
 
         public async Task<SignInResult> Login(LoginDTO model)

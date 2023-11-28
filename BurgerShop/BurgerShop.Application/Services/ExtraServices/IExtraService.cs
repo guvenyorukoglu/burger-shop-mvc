@@ -1,11 +1,6 @@
 ﻿using BurgerShop.Application.Models.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BurgerShop.Application.Services.ExtraDervices
+namespace BurgerShop.Application.Services.ExtraServices
 {
     public interface IExtraService
     {

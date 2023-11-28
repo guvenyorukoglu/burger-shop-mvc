@@ -2,7 +2,7 @@
 
 namespace BurgerShop.Domain.Entities.Concrete
 {
-    public class Extra : BaseEntity, IEntity<Guid>, IProduct
+    public class Extra : BaseEntity, IEntity<Guid>
     {
         public Extra()
         {

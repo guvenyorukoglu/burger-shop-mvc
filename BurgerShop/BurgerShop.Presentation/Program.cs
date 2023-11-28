@@ -2,6 +2,7 @@ using BurgerShop.Application.Services.Abstract;
 using BurgerShop.Application.Services.AdressServices;
 using BurgerShop.Application.Services.AppUserServices;
 using BurgerShop.Application.Services.Concrete;
+using BurgerShop.Application.Services.ExtraServices;
 using BurgerShop.Application.Services.MenuServices;
 using BurgerShop.Application.Services.OrderServices;
 using BurgerShop.Domain.Entities.Concrete;
@@ -50,7 +51,8 @@ namespace BurgerShop.Presentation
                             .AddTransient<IAppUserService, AppUserService>()
                             .AddTransient<IMenuService, MenuService>()
                             .AddTransient<IOrderService, OrderService>()
-                            .AddTransient<IAdressService, AdressService>();
+                            .AddTransient<IAdressService, AdressService>()
+                            .AddTransient<IExtraService, ExtraService>();
 
 
             builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
