@@ -33,7 +33,8 @@ namespace BurgerShop.Presentation
 
 
 
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TarikSQL")));
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TolgaSQL")));
+
             builder.Services.AddTransient<IBaseRepository<Address>, AddressRepository>()
                             .AddTransient<IBaseRepository<AppUser>, AppUserRepository>()
                             .AddTransient<IBaseRepository<Extra>, ExtraRepository>()
