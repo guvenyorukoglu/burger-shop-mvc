@@ -62,19 +62,19 @@ namespace BurgerShop.Presentation.Controllers
             return RedirectToAction("Index");
         }
 
-        //public async Task<IActionResult> Delete(Guid id)
-        //{
-        //    await _addressService.GetById(id);
-        //    return View();
+        public async Task<IActionResult> DeleteAddress(Guid id)
+        {
+            await _addressService.GetById(id);
+            return View();
 
-        //}
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Delete(AddressDTO model)
-        //{
-        //    await _addressService.Delete(model);
-        //    return RedirectToAction("Index");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> DeleteAddress(AddressDTO model)
+        {
+            await _addressService.Delete(model.Id);
+            return RedirectToAction("Index");
+        }
     }
 }
 
