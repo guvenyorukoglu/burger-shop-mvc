@@ -1,52 +1,44 @@
-﻿
-using Bogus.DataSets;
-using BurgerShop.Application.Models.DTOs;
+﻿using BurgerShop.Application.Models.DTOs;
 using BurgerShop.Application.Models.VMs;
 using BurgerShop.Application.Services.Abstract;
 using BurgerShop.Application.Services.AppUserServices;
-using BurgerShop.Application.Services.Concrete;
+using BurgerShop.Application.Services.ExtraServices;
 using BurgerShop.Application.Services.MenuServices;
 using BurgerShop.Application.Services.OrderServices;
 using BurgerShop.Domain.Entities.Concrete;
-using BurgerShop.Domain.Enums;
-using BurgerShop.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BurgerShop.Presentation.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
+        private readonly IMenuService _menuService;
+        private readonly IExtraService _extraService;
+        private readonly IOrderService _orderService;
+        private readonly IBaseService<Menu> _baseMenuService;
+        private readonly IBaseService<Extra> _baseExtraService;
+        private readonly IBaseService<AppUser> _baseAppUserService;
+        private readonly IAppUserService _appUserService;
 
-        private static List<Menu> menuList = new List<Menu>();
 
-        private static List<Extra> extras = new List<Extra>();
-        private static IMenuService _menuService;
-        private static IOrderService _orderService;
-     
-       
-    
-        private static IBaseService<Menu> _baseService;
-        private static IBaseService<AppUser> _appUserService;
-    
-
-        public AdminController(IMenuService menuService, IBaseService<AppUser> appUserService, IBaseService<Menu> baseService, IOrderService orderService )
+        public AdminController(IMenuService menuService, IBaseService<AppUser> baseAppUserService, IBaseService<Menu> baseMenuService, IOrderService orderService, IAppUserService appUserService, IExtraService extraService, IBaseService<Extra> baseExtraService)
         {
-            _baseService = baseService;
+            _baseMenuService = baseMenuService;
             _menuService = menuService;
-            _appUserService = appUserService;
+            _baseAppUserService = baseAppUserService;
             _orderService = orderService;
-         
-
+            _appUserService = appUserService;
+            _extraService = extraService;
+            _baseExtraService = baseExtraService;
         }
 
-
         // MENU ACTIONS
-
         public IActionResult Index()
         {
-            return RedirectToAction("Login","Account");
+            return RedirectToAction("Login", "Account");
         }
 
         public async Task<IActionResult> Menus()
@@ -65,24 +57,40 @@ namespace BurgerShop.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> AddMenu(MenuDTO menu)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(menu);
+            }
+
             await _menuService.Create(menu);
             return RedirectToAction("Menus");
         }
 
 
         public IActionResult DeleteMenu(Guid id)
-        { 
-            return View(_baseService.GetById(id));
+        {
+            return View(_baseMenuService.GetById(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteMenu(MenuDTO menu)
         {
-            await _baseService.Delete(menu.Id);
+            await _baseMenuService.Delete(menu.Id);
             return RedirectToAction("Menus");
         }
+        public IActionResult EditMenu(Guid id)
+        {
+            Menu menu = _baseMenuService.GetById(id);
+            MenuDTO menuDTO = new MenuDTO();
+            menuDTO.Id = menu.Id;
+            menuDTO.MenuName = menu.MenuName;
+            menuDTO.Status = menu.Status;
+            menuDTO.MenuImagePath = menu.MenuImagePath;
+            menuDTO.MenuSize = menu.MenuSize;
+            menuDTO.MenuPrice = menu.MenuPrice;
 
-
+            return View(menuDTO);
+        }
 
         [HttpPost]
         public async Task<IActionResult> EditMenu(MenuDTO menu)
@@ -91,11 +99,63 @@ namespace BurgerShop.Presentation.Controllers
             return RedirectToAction("Menus");
         }
 
+     
 
-
-        public IActionResult EditMenu(Guid id)
+        //EXTRAS
+        public async Task<IActionResult> Extras()
         {
-            return View(_baseService.GetById(id));
+            return View(await _extraService.GetAll());
+
+        }
+
+        public async Task<IActionResult> AddExtra()
+        {
+            return View(new ExtraDTO());
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddExtra(ExtraDTO extra)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(extra);
+            }
+
+            await _extraService.Create(extra);
+            return RedirectToAction("Extras");
+        }
+
+
+        public IActionResult DeleteExtra(Guid id)
+        {
+            return View(_baseExtraService.GetById(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteExtra(ExtraDTO extra)
+        {
+            await _extraService.Delete(extra.Id);
+            return RedirectToAction("Extras");
+        }
+        public IActionResult EditExtra(Guid id)
+        {
+            Extra extra = _baseExtraService.GetById(id);
+            ExtraDTO extraDTO = new ExtraDTO();
+            extraDTO.Id = extra.Id;
+            extraDTO.ExtraName = extra.ExtraName;
+            extraDTO.ExtraPrice = extra.ExtraPrice;
+            extraDTO.ExtraImageUrl = extra.ExtraImageUrl;
+            extraDTO.Status = extra.Status;
+
+            return View(extraDTO);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditExtra(ExtraDTO extra)
+        {
+            await _extraService.Update(extra);
+            return RedirectToAction("Extras");
         }
 
 
@@ -103,46 +163,63 @@ namespace BurgerShop.Presentation.Controllers
         // CUSTOMER ACTIONS
         public async Task<IActionResult> Customers()
         {
-            return View(await _appUserService.GetAll());
+            return View(await _appUserService.GetCustomers());
         }
 
-        //TODO Create Metotları Servisten Getirilecek
+        public async Task<IActionResult> CustomerOrders(Guid id)
+        {
+            return View(await _orderService.GetCustomerOrders(id));
+        }
+
+        public async Task<IActionResult> OrderDetails(Guid id)
+        {
+            return RedirectToAction("Customers");
+        }
+
+
+        [HttpGet]
         public async Task<IActionResult> AddCustomer()
         {
-            return View(new AppUser());
+
+            return View(new CustomerDTO());
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCustomer(AppUser appUser)
+        public async Task<IActionResult> AddCustomer(CustomerDTO model)
         {
-            await _appUserService.Insert(appUser);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await _appUserService.Create(model);
             return RedirectToAction("Customers");
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteCustomer(AppUser appUser)
         {
-            await _appUserService.Delete(appUser.Id);
+            await _baseAppUserService.Delete(appUser.Id);
             return RedirectToAction("Customers");
         }
 
 
         public IActionResult DeleteCustomer(Guid id)
         {
-            return View(_appUserService.GetById(id));
+            return View(_baseAppUserService.GetById(id));
         }
 
 
         public IActionResult EditCustomer(Guid id)
         {
-            return View(_appUserService.GetById(id));
+            return View(_baseAppUserService.GetById(id));
         }
 
 
         [HttpPost]
         public async Task<IActionResult> EditCustomer(AppUser appUser)
         {
-            await _appUserService.Update(appUser);
+            await _baseAppUserService.Update(appUser);
             return RedirectToAction("Customers");
         }
 

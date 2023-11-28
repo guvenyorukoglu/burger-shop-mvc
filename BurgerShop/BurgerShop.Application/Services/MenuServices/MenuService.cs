@@ -60,6 +60,7 @@ namespace BurgerShop.Application.Services.MenuServices
             menu.MenuPrice = model.MenuPrice;
             menu.MenuImagePath = model.MenuImagePath;
             menu.ModifiedDate = DateTime.Now;
+            menu.Status = model.Status;
 
             await _menuRepository.Update(menu);
         }

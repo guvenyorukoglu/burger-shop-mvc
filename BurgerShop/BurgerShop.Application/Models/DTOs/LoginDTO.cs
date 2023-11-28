@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BurgerShop.Application.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace BurgerShop.Application.Models.DTOs
     public class LoginDTO
     {
         [Required]
+        [CustomEmail(ErrorMessage = "Email is invalid!")]
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
