@@ -88,6 +88,11 @@ namespace BurgerShop.Application.Services.AppUserServices
         public async Task<SignInResult> Login(LoginDTO model)
         {
             AppUser appUser = await _repository.GetSingleDefault(x => x.Email == model.Email);
+            if(appUser == null)
+            {
+                return SignInResult.Failed;
+            }
+
             var result = await _signInManager.PasswordSignInAsync(appUser, model.Password, false, false);
 
             return result;
