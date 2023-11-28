@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/editProfile.css">
-    <title>Profili Düzenle</title>
+    <title>Edit Profile</title>
 </head>
 <body>
 
@@ -63,13 +63,21 @@
                 <input type="submit" value="Save Changes" class="btn btn-primary" />
             </div>
 
-
         </form>
 
-    
 
-           
-           <a asp-action="Index" asp-controller="Address">Address </a>
+        <div class="navigation-links d-flex justify-content-between">
+            <a asp-action="Index" asp-controller="Address">
+                <button class="btn btn-primary">Address</button>
+            </a>
+
+            <a asp-action="Index" asp-controller="Order">
+                <button class="btn btn-primary">Order</button>
+            </a>
+            <a asp-action="Index" asp-controller="Home">
+                <button class="btn btn-primary">Home</button>
+            </a>
+        </div>
           
 
        
