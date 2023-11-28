@@ -14,16 +14,20 @@
 
 
     <header>
-        <h2>Admin Dashboard <a href="#"><i class="fa fa-user float-end"></i></a> </h2>
-
+        <h2>
+            Admin Dashboard
+            <a asp-action="Logout" asp-controller="Account"><i class="fa fa-sign-out float-end"></i></a>
+            <a asp-action="EditProfile" asp-controller="Account"><i class="fa fa-user float-end"></i></a>
+        </h2>
     </header>
+
 
     @if (Model != null)
     {
         <section class="row">
             <article class="col-md-3 col-lg-2 article-left">
 
-                <h2 class="text-center title">Admin Dashboard</h2>
+                <h2 class="text-center title">Customer List</h2>
                 <ul class="fa-ul">
 
                     <li><i class="fa fa-list" aria-hidden="true"></i><a asp-action="Menus" asp-controller="Admin">MENUS</a></li>
@@ -37,7 +41,7 @@
                 </ul>
             </article>
             <article class="col-md-10 article-right">
-                <h1>Admin Panel</h1>
+                
                 <div class="search-bar" style="display:flex">
                     <input type="text" id="searchInput" placeholder="Search by lastname"><i class="fas fa-search mt-2"></i>
                 </div>
@@ -78,7 +82,7 @@
                                     </td>
                                     <td>
                                         <a asp-action="EditCustomer" asp-controller="Admin" asp-route-id="@item.Id">
-                                            <button class="btn btn-secondary btn-sm d-inline-flex"><i class="fa fa-pen"></i></button>
+                                            <button class="btn btn-secondary btn-sm d-inline-flex bg-primary"><i class="fa fa-pen"></i></button>
                                         </a>
 
                                         <a asp-action="DeleteCustomer" asp-controller="Admin" asp-route-id="@item.Id">

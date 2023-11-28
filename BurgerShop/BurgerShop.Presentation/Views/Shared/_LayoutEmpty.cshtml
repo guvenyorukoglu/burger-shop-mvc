@@ -47,6 +47,54 @@
         });
     </script>
 
+    
+    <script>
+        function toggleDropdown() {
+            document.getElementById("statusDropdown").classList.toggle("show");
+        }
+
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        function filterRows(status) {
+            var table = document.querySelector('.table-bordered');
+            var rows = table.getElementsByTagName('tr');
+
+            for (var i = 1; i < rows.length; i++) {
+                var statusCell = rows[i].getElementsByTagName('td')[4];
+
+                if (statusCell) {
+                    var statusText = statusCell.innerText || statusCell.textContent;
+
+                    if (statusText.trim() === status) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function resetFilter() {
+            var table = document.querySelector('.table-bordered');
+            var rows = table.getElementsByTagName('tr');
+
+            for (var i = 1; i < rows.length; i++) {
+                rows[i].style.display = '';
+            }
+        }
+    </script>
+
+
 
 </head>
 
