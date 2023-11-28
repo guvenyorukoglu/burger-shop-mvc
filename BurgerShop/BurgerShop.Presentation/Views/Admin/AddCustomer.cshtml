@@ -1,19 +1,15 @@
 ﻿
-@using BurgerShop.Domain.Entities.Concrete;
-
-@model AppUser
-
 @{
     ViewData["Title"] = "AddCustomer";
     Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 
 }
 
+@model CustomerDTO
 
-<div class="container">
+<div class="row flex-column container ps-5">
 
     <h1>Add</h1>
-
 
 <hr />
 
@@ -33,6 +29,21 @@
                     <input asp-for="LastName" class="form-control" />
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
 
                 <div class="form-group">
                     <label class="control-label">Gender</label>
@@ -47,44 +58,29 @@
                     <span asp-validation-for="Gender" class="text-danger"></span>
                 </div>
 
-
-
-
                 <div class="form-group">
                     <label asp-for="BirthDate" class="control-label"></label>
-                    <input asp-for="BirthDate" class="form-control" />
+                    <input type="date" asp-for="BirthDate" class="form-control" id="birthdate" />
                     <span asp-validation-for="BirthDate" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="PhoneNumber" class="control-label"></label>
-                    <input asp-for="PhoneNumber" class="form-control" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Addresses" class="control-label"></label>
-                    <input asp-for="Addresses" class="form-control" />
-                    <span asp-validation-for="Addresses" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <img src="@Model.ProfileImagePath" alt="category-item-picture">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="ProfileImagePath" class="control-label"></label>
                     <input asp-for="ProfileImagePath" class="form-control" />
                     <span asp-validation-for="ProfileImagePath" class="text-danger"></span>
-                    <a asp-action="UploadPicture" asp-controller="Admin" asp-route-MenuId="@Model.Id">
+
+                    <a asp-action="UploadPicture" asp-controller="Admin" asp-route-Id="@Model.Id">
                         <button class="btn btn-dark btn-sm d-inline-flex m-3">Upload Picture</button>
-                    </a> <a asp-action="DeletePicture" asp-controller="Admin" asp-route-MenuId="@Model.Id">
+                    </a> <a asp-action="DeletePicture" asp-controller="Admin" asp-route-Id="@Model.Id">
                         <button class="btn btn-secondary btn-sm d-inline-flex m-3">Delete Picture</button>
                     </a>
                 </div>
-
-
-
 
 
             <div class="form-group">
@@ -106,3 +102,8 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+<script>
+    let currentDate = new Date().toISOString().split('T')[0];
+    document.getElementById('birthdate').max = currentDate;
+</script>

@@ -3,7 +3,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -44,9 +46,9 @@
                 {
                     <div class="user-account">
                         <a asp-action="EditProfile" asp-controller="Account" class="user-link">
-                            <i class="fa fa-user"
+                            @User.Identity.Name<i class="fa fa-user ms-2"
                                aria-hidden="true"
-                               style="color: #ffc107"></i>@* @User.FindFirst("UserName").Value *@
+                               style="color: #ffc107"></i>
                         </a>
                         <a asp-action="Index" asp-controller="Cart">
                             <i class="fa fa-shopping-cart"

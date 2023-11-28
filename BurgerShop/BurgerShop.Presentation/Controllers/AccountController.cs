@@ -88,7 +88,7 @@ namespace BurgerShop.Presentation.Controllers
                     return Redirect(model.ReturnUrl ?? "/");
                 }
                 else
-                    ModelState.AddModelError("", "Wrong credential information..");
+                    ModelState.AddModelError("", "Email or password is wrong!");
             }
 
             return View(model);
@@ -148,6 +148,11 @@ namespace BurgerShop.Presentation.Controllers
                 }
             }
             return View(model);
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
     }

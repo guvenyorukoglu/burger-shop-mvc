@@ -1,8 +1,6 @@
 ﻿using BurgerShop.Application.Models.DTOs;
-using BurgerShop.Domain.Entities.Concrete;
+using BurgerShop.Application.Models.VMs;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
 
 namespace BurgerShop.Application.Services.AppUserServices
 {
@@ -18,7 +16,11 @@ namespace BurgerShop.Application.Services.AppUserServices
 
         Task Logout();
 
-        
+        Task<List<CustomerVM>> GetCustomers();
+
+        Task Create(CustomerDTO model);
+
+
 
     }
 }

@@ -1,0 +1,115 @@
+﻿@using BurgerShop.Application.Models.DTOs;
+@using BurgerShop.Domain.Enums;
+@model List<ExtraDTO>
+@{
+    ViewData["Title"] = "Menus";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+
+}
+
+<body>
+
+
+
+    <header>
+        <h2>Admin Dashboard <a href="#"><i class="fa fa-user float-end"></i></a> </h2>
+
+    </header>
+
+
+
+    @if (Model != null)
+    {
+
+        <section class="row">
+            <article class="col-md-3 col-lg-2 article-left">
+
+                <h2 class="text-center title">Admin Dashboard</h2>
+                <ul class="fa-ul">
+
+                    <li><i class="fa fa-list" aria-hidden="true"></i><a asp-action="Menus" asp-controller="Admin">MENUS</a></li>
+                    <li><i class="fa fa-list" aria-hidden="true"></i><a asp-action="Extras" asp-controller="Admin">EXTRAS</a></li>
+                    <li><i class="fa fa-user-o" aria-hidden="true"></i><a asp-action="Customers" asp-controller="Admin">CUSTOMERS</a></li>
+                    <li><i class="fa fa-rocket" aria-hidden="true"></i><a asp-action="Orders" asp-controller="Admin">ORDERS</a></li>
+                    <li><i class="fa fa-pie-chart" aria-hidden="true"></i><a href="#">Statistics</a></li>
+                    <li><i class="fa fa-cogs" aria-hidden="true"></i><a href="#">Settings</a></li>
+                    <li><i class="fa fa-line-chart" aria-hidden="true"></i><a href="#">Analytics</a></li>
+                    <li><i class="fa fa-facebook" aria-hidden="true"></i><a href="#">Social</a></li>
+                    <li><i class="fa fa-rss" aria-hidden="true"></i><a href="#">Feedback</a></li>
+                </ul>
+            </article>
+            <article class="col-md-10 article-right">
+                <h1>Extra List</h1>
+                <div class="search-bar" style="display:flex">
+                    <input type="text" id="searchInput" placeholder="Search by name"><i class="fas fa-search mt-2"></i>
+                </div>
+                <hr>
+                @if (Model != null)
+                {
+                    <a asp-action="AddExtra" asp-controller="Admin">
+                        <button class="btn btn-dark mb-3 btn-sm d-inline-flex">Add a New Extra</button>
+                    </a>
+                }
+
+
+
+                <table class="table table-striped table-bordered w-100">
+                    <thead>
+                        <tr>
+                            <th style="width:25%">Id</th>
+                            <th style="width:20%">Extra Name</th>
+                            <th style="width:10%">Price</th>
+                            <th style="width:10%">Status</th>
+                            <th style="width:10%">Image</th>
+                            <th style="width:10%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.ExtraName</td>
+                                    <td>@item.ExtraPrice.ToString()</td>
+                                    <td>@item.Status</td>
+                                    <td>
+                                        <img src="@item.ExtraImageUrl" alt="extra-picture" style="width:50%">
+
+                                    </td>
+                                    <td>
+
+                                        <a asp-action="EditExtra" asp-controller="Admin" asp-route-id="@item.Id">
+                                            <button class="btn btn-secondary btn-sm d-inline-flex"><i class="fa fa-pen"></i></button>
+                                        </a>
+
+                                        <a asp-action="DeleteExtra" asp-controller="Admin" asp-route-id="@item.Id">
+                                            <button class="btn btn-danger btn-sm d-inline-flex"><i class="fa fa-trash"></i></button>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+
+
+
+
+
+
+
+            </article>
+        </section>
+    }
+
+    <div class="pagination"></div>
+
+</body>
+
+

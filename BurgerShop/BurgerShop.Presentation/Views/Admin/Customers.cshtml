@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
-@model List<AppUser>
+@model List<CustomerVM>
 
 <body>
 
@@ -31,6 +31,7 @@
                 <ul class="fa-ul">
 
                     <li><i class="fa fa-list" aria-hidden="true"></i><a asp-action="Menus" asp-controller="Admin">MENUS</a></li>
+                    <li><i class="fa fa-list" aria-hidden="true"></i><a asp-action="Extras" asp-controller="Admin">EXTRAS</a></li>
                     <li><i class="fa fa-user-o" aria-hidden="true"></i><a asp-action="Customers" asp-controller="Admin">CUSTOMERS</a></li>
                     <li><i class="fa fa-rocket" aria-hidden="true"></i><a asp-action="Orders" asp-controller="Admin">ORDERS</a></li>
                     <li><i class="fa fa-pie-chart" aria-hidden="true"></i><a href="#">Statistics</a></li>
@@ -41,24 +42,34 @@
                 </ul>
             </article>
             <article class="col-md-10 article-right">
-                
+              
+                <h1>Customer List</h1>
+
                 <div class="search-bar" style="display:flex">
                     <input type="text" id="searchInput" placeholder="Search by lastname"><i class="fas fa-search mt-2"></i>
                 </div>
                 <hr>
+                @if (Model != null)
+                {
+                    <a asp-action="AddCustomer" asp-controller="Admin">
+                        <button class="btn btn-dark mb-3 btn-sm d-inline-flex">Add a New Customer</button>
+                    </a>
+                }
 
-
-                <table class="table-bordered w-100">
+                <table class="table table-striped table-bordered w-100 mb-5">
                     <thead>
                         <tr>
                             <th>Id</th>
+                            <th style="width:6%">Profile Picture</th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Gender</th>
                             <th>Birth Date</th>
-                            <th style="width:20%">Phone Number</th>
-
-                            <th style="width:10%">Profile Picture</th>
+                            <th style="width:10%">Phone Number</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
+                            <th>Modified Date</th>
+                            <th>Deleted Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -71,15 +82,19 @@
                             {
                                 <tr>
                                     <td>@item.Id</td>
-                                    <td>@item.FirstName</td>
-                                    <td>@item.LastName.ToString()</td>
-                                    <td>@item.Gender</td>
-                                    <td>@item.BirthDate</td>
-                                    <td>@item.PhoneNumber</td>
                                     <td>
                                         <img src="@item.ProfileImagePath" alt="customer-picture" style="width:30%">
-
                                     </td>
+                                    <td>@item.FirstName</td>
+                                    <td>@item.LastName</td>
+                                    <td>@item.Gender</td>
+                                    <td>@item.BirthDate</td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.Status</td>
+                                    <td>@item.CreatedDate</td>
+                                    <td>@item.ModifiedDate</td>
+                                    <td>@item.DeletedDate</td>
+                                    
                                     <td>
                                         <a asp-action="EditCustomer" asp-controller="Admin" asp-route-id="@item.Id">
                                             <button class="btn btn-secondary btn-sm d-inline-flex bg-primary"><i class="fa fa-pen"></i></button>
@@ -87,6 +102,9 @@
 
                                         <a asp-action="DeleteCustomer" asp-controller="Admin" asp-route-id="@item.Id">
                                             <button class="btn btn-danger btn-sm d-inline-flex"><i class="fa fa-trash"></i></button>
+                                        </a>
+                                        <a asp-action="CustomerOrders" asp-controller="Admin" asp-route-id="@item.Id">
+                                            <button class="btn btn-success btn-sm d-inline-flex "><i class="fa fa-shopping-cart "></i></button>
                                         </a>
 
                                     </td>
@@ -96,12 +114,7 @@
                     </tbody>
                 </table>
 
-                @if (Model != null)
-                {
-                    <a asp-action="AddCustomer" asp-controller="Admin">
-                        <button class="btn btn-dark btn-sm d-inline-flex">Add a New Customer</button>
-                    </a>
-                }
+                
 
             </article>
         </section>
